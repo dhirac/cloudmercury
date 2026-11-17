@@ -1,0 +1,9 @@
+{% extends "accounts/auth_base.html" %}
+{% block title %}No access{% endblock %}
+{% block content %}
+<div class="shield">{% include "partials/icon.html" with name="lock" size=28 %}</div>
+<h1>No access</h1>
+<p>Your account can't open the website dashboard. Ask an administrator to give you staff access.</p>
+<form method="post" action="{% url 'accounts:logout' %}">{% csrf_token %}<button class="btn btn-primary btn-block" type="submit">Sign out</button></form>
+<p class="auth-alt"><a href="/">Back to the website</a></p>
+{% endblock %}

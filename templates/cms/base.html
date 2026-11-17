@@ -1,0 +1,60 @@
+{% load static %}<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>{% block title %}Dashboard{% endblock %} – CloudMercury dashboard</title>
+  <link rel="icon" type="image/svg+xml" href="{% static 'ci/img/cloudmercury-mark.svg' %}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'ci/css/ci.css' %}">
+  <link rel="stylesheet" href="{% static 'ci/css/cms.css' %}">
+  {% block head %}{% endblock %}
+</head>
+<body>
+{% include "partials/messages.html" %}
+<div class="portal">
+  <aside class="side" aria-label="Dashboard menu">
+    <a href="{% url 'cms:home' %}" class="brand"><img src="{% static 'ci/img/cloudmercury-logo-light.svg' %}" alt="CloudMercury dashboard"></a>
+    <div class="side-scroll">
+      <nav>
+        <a href="{% url 'cms:home' %}" class="{% if active == 'home' %}on{% endif %}">{% include "partials/icon.html" with name="home" %}Overview</a>
+        <a href="{% url 'cms:inbox' %}" class="{% if active == 'inbox' %}on{% endif %}">{% include "partials/icon.html" with name="mail" %}Messages{% with n=cms_unread %}{% if n %}<span class="count">{{ n }}</span>{% endif %}{% endwith %}</a>
+        <div class="side-label">Website content</div>
+        {% for slug, label, icon in cms_sections %}
+        <a href="{% url 'cms:section' slug %}" class="{% if active == slug %}on{% endif %}">{% include "partials/icon.html" with name=icon %}{{ label }}</a>
+        {% endfor %}
+        <div class="side-label">Account</div>
+        <a href="{% url 'accounts:security' %}" class="{% if active == 'security' %}on{% endif %}">{% include "partials/icon.html" with name="shield" %}Security{% if cms_two_factor_on and not user.profile.totp_enabled %}<span class="count">!</span>{% endif %}</a>
+        <a href="{% url 'accounts:profile' %}" class="{% if active == 'profile' %}on{% endif %}">{% include "partials/icon.html" with name="user" %}Profile</a>
+        {% if user.is_superuser %}<a href="{% url 'admin:index' %}">{% include "partials/icon.html" with name="key" %}Advanced (Django admin)</a>{% endif %}
+      </nav>
+    </div>
+    <div class="side-foot">
+      <a class="view-site" href="/" target="_blank" rel="noopener">{% include "partials/icon.html" with name="external" size=16 %}View website</a>
+      <div class="side-user">
+        <div class="avatar">{{ user.first_name|default:user.username|slice:":1"|upper }}</div>
+        <div><b>{{ user.first_name|default:user.username }}</b><span>{{ user.email|truncatechars:28 }}</span></div>
+      </div>
+      <form method="post" action="{% url 'accounts:logout' %}">{% csrf_token %}<button type="submit">Sign out</button></form>
+    </div>
+  </aside>
+  <main class="main">
+    <div class="topbar">
+      <button class="menu-btn" data-menu aria-label="Open menu">{% include "partials/icon.html" with name="menu" %}</button>
+      <div>
+        {% block crumb %}{% endblock %}
+        <h1>{% block heading %}{% endblock %}</h1>
+        {% block sub %}{% endblock %}
+      </div>
+      <div class="topbar-actions">{% block actions %}{% endblock %}</div>
+    </div>
+    {% block content %}{% endblock %}
+  </main>
+</div>
+<script src="{% static 'ci/js/site.js' %}" defer></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

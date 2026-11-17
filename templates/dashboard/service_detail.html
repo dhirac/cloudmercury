@@ -1,0 +1,35 @@
+{% extends "dashboard/base.html" %}
+{% block title %}{{ service.name }}{% endblock %}
+{% block heading %}{{ service.name }}{% endblock %}
+{% block sub %}<p class="sub">{{ service.get_category_display }}{% if service.plan %}, {{ service.plan }} plan{% endif %}</p>{% endblock %}
+{% block actions %}<a class="btn btn-ghost btn-sm" href="{% url 'dashboard:support' %}?new=1&service={{ service.pk }}">Get help with this</a>{% endblock %}
+{% block content %}
+<div class="grid g-4" style="margin-bottom:20px">
+  <div class="card kpi"><div class="k-label">Status</div><div style="margin:.6rem 0">{% include "dashboard/_status.html" with s=service.status label=service.get_status_display %}</div></div>
+  <div class="card kpi"><div class="k-label">Price</div><div class="k-val">€{{ service.price_monthly|floatformat:2 }}</div><div class="k-foot">per month</div></div>
+  <div class="card kpi"><div class="k-label">Renews on</div><div class="k-val" style="font-size:1.5rem">{{ service.renews_on|date:"j M Y"|default:"Not set" }}</div></div>
+  <div class="card kpi"><div class="k-label">Uptime, 30 days</div><div class="k-val">{{ service.uptime_30d|floatformat:2 }}%</div></div>
+</div>
+<div class="grid g-2">
+  <section class="card">
+    <div class="card-head"><h2>Usage</h2></div>
+    {% if service.disk_total_gb %}
+    <div class="usage-l"><span>Disk space</span><span>{{ service.disk_used_gb|floatformat:1 }} of {{ service.disk_total_gb|floatformat:0 }} GB</span></div>
+    <div class="meter{% if service.disk_pct >= 90 %} bad{% elif service.disk_pct >= 75 %} warn{% endif %}" style="margin-bottom:18px"><i style="width:{{ service.disk_pct }}%"></i></div>
+    {% endif %}
+    {% if service.mailboxes_total %}
+    <div class="usage-l"><span>Mailboxes</span><span>{{ service.mailboxes_used }} of {{ service.mailboxes_total }}</span></div>
+    <div class="meter" style="margin-bottom:18px"><i style="width:{{ service.mailbox_pct }}%"></i></div>
+    {% endif %}
+    {% if service.bandwidth_gb %}<p class="muted" style="margin:0">{{ service.bandwidth_gb|floatformat:1 }} GB transferred this month.</p>{% endif %}
+    {% if not service.disk_total_gb and not service.mailboxes_total %}<p class="muted" style="margin:0">Usage will appear here once this service is set up.</p>{% endif %}
+  </section>
+  <section class="card">
+    <div class="card-head"><h2>Recent tickets</h2></div>
+    {% for t in tickets %}
+      <div class="res-row"><a class="name" href="{% url 'dashboard:ticket' t.pk %}">{{ t.subject }}</a>{% include "dashboard/_status.html" with s=t.status label=t.get_status_display %}</div>
+    {% empty %}<p class="muted" style="margin:0">No tickets for this service.</p>{% endfor %}
+  </section>
+</div>
+{% if service.notes %}<section class="card" style="margin-top:20px"><div class="card-head"><h2>Notes</h2></div><p style="margin:0;white-space:pre-wrap">{{ service.notes }}</p></section>{% endif %}
+{% endblock %}

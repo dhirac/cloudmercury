@@ -1,0 +1,32 @@
+{% extends "dashboard/base.html" %}
+{% block title %}Hosting & services{% endblock %}
+{% block heading %}Hosting & services{% endblock %}
+{% block sub %}<p class="sub">Websites, mailboxes, domains and ongoing services on your account.</p>{% endblock %}
+{% block actions %}<a class="btn btn-primary btn-sm" href="{% url 'dashboard:order' %}">{% include "partials/icon.html" with name="plus" size=16 %}Order a service</a>{% endblock %}
+{% block content %}
+<nav class="tabs" aria-label="Filter by type">
+  <a href="{% url 'dashboard:services' %}" class="{% if not current %}on{% endif %}">All</a>
+  {% for code, label in categories %}<a href="?category={{ code }}" class="{% if current == code %}on{% endif %}">{{ label }}</a>{% endfor %}
+</nav>
+<section class="card">
+  {% if services %}
+  <div class="table-wrap"><table class="table">
+    <thead><tr><th>Service</th><th>Type</th><th>Plan</th><th>Status</th><th>Renews</th><th class="num">Monthly</th></tr></thead>
+    <tbody>
+    {% for s in services %}
+      <tr>
+        <td><a href="{% url 'dashboard:service' s.pk %}">{{ s.name }}</a>{% if s.domain and s.domain != s.name %}<div class="muted" style="font-size:.85rem">{{ s.domain }}</div>{% endif %}</td>
+        <td>{{ s.get_category_display }}</td>
+        <td>{{ s.plan|default:"–" }}</td>
+        <td>{% include "dashboard/_status.html" with s=s.status label=s.get_status_display %}</td>
+        <td>{{ s.renews_on|date:"j M Y"|default:"–" }}</td>
+        <td class="num">€{{ s.price_monthly|floatformat:2 }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table></div>
+  {% else %}
+  <div class="empty"><div class="shield">{% include "partials/icon.html" with name="box" %}</div><h3>Nothing here yet</h3><p>Order hosting, email, a domain or a development project and it will show up here.</p><a class="btn btn-primary btn-sm" href="{% url 'dashboard:order' %}{% if current %}?category={{ current }}{% endif %}">Order a service</a></div>
+  {% endif %}
+</section>
+{% endblock %}

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0E1A47">
+<link rel="icon" href="/static/assets/img/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/ci/css/ci.css">
+
+  <title>Security – CloudInovater</title>
+  <meta name="robots" content="noindex">
+  
+</head>
+<body>
+
+
+<div class="portal">
+  <aside class="side" aria-label="Dashboard menu">
+    <a href="/" class="brand"><svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#1F3FBF"/><path d="M16 4a12 12 0 0 1-12 12M16 4a12 12 0 0 0 12 12M16 28A12 12 0 0 1 4 16M16 28a12 12 0 0 0 12-12" stroke="#fff" stroke-width="2" fill="none"/><circle cx="16" cy="16" r="3.2" fill="#fff"/></svg>
+CloudInovater</a>
+    <nav>
+      <a href="/dashboard/" class=""><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11 12 4l8 7v8a1 1 0 0 1-1 1h-4v-6h-6v6H5a1 1 0 0 1-1-1z"/></svg>
+Overview</a>
+      <a href="/dashboard/services/" class=""><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="7" rx="2"/><rect x="3" y="13" width="18" height="7" rx="2"/><path d="M7 7.5h.01M7 16.5h.01M11 7.5h6M11 16.5h6"/></svg>
+Hosting & services</a>
+      <a href="/dashboard/projects/" class=""><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 8-4 4 4 4M16 8l4 4-4 4M13.5 5l-3 14"/></svg>
+Software projects</a>
+      <a href="/dashboard/marketing/" class=""><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19V5M4 19h16M8 15l3-4 3 2 5-6"/></svg>
+Marketing</a>
+      <a href="/dashboard/billing/" class=""><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18M7 15h4"/></svg>
+Billing</a>
+      <a href="/dashboard/support/" class=""><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6v.6M12 17h.01"/></svg>
+Support</a>
+      <div class="side-label">Account</div>
+      <a href="/accounts/profile/" class=""><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6 8-6s8 2 8 6"/></svg>
+Profile</a>
+      <a href="/accounts/security/" class="on"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 5 6v5c0 4.5 3 8 7 10 4-2 7-5.5 7-10V6z"/><path d="m9 12 2 2 4-4"/></svg>
+Security<span class="count" title="Two-factor is off">!</span></a>
+      
+    </nav>
+    <div class="side-foot">
+      <div class="side-user">
+        <div class="avatar">M</div>
+        <div><b>Marta Silva</b><span>Atlântico Surf Co.</span></div>
+      </div>
+      <form method="post" action="/accounts/logout/"><input type="hidden" name="csrfmiddlewaretoken" value="8baq47PAMoZaTBDLkEJ0VEyaxH2MlW9yrgUU6l1i5VuSdheQjPSwbaWz4BZvkCs0"><button type="submit">Sign out</button></form>
+    </div>
+  </aside>
+  <main class="main">
+    <div class="topbar">
+      <button class="menu-btn" data-menu aria-label="Open menu"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+</button>
+      <div>
+        <h1>Security</h1>
+        <p class="sub">Two-factor sign-in, password and recent account activity.</p>
+      </div>
+      <div class="topbar-actions"></div>
+    </div>
+    
+<div class="grid g-main">
+  <div class="grid">
+    <section class="card">
+      <div class="card-head"><h2>Two-factor authentication</h2></div>
+      
+        <div class="sec-status off">
+          <div class="shield"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+</div>
+          <div>
+            <b>Two-factor is off</b>
+            <p class="muted" style="margin:0 0 .8rem">Anyone with your password can sign in. Turn on two-factor so a code from your phone is also needed.</p>
+            <a class="btn btn-primary btn-sm" href="/accounts/security/2fa/setup/">Turn on two-factor</a>
+          </div>
+        </div>
+      
+    </section>
+
+    <section class="card">
+      <div class="card-head"><h2>Change password</h2></div>
+      <form method="post" novalidate>
+        <input type="hidden" name="csrfmiddlewaretoken" value="8baq47PAMoZaTBDLkEJ0VEyaxH2MlW9yrgUU6l1i5VuSdheQjPSwbaWz4BZvkCs0">
+        <input type="hidden" name="action" value="password">
+        <div class="field">
+  <label for="id_old_password">Old password</label>
+  <input type="password" name="old_password" autocomplete="current-password" autofocus class="input" id="id_old_password" required>
+  
+  
+</div>
+
+        <div class="grid g-2" style="gap:16px">
+          <div class="field">
+  <label for="id_new_password1">New password</label>
+  <input type="password" name="new_password1" autocomplete="new-password" class="input" id="id_new_password1" aria-describedby="id_new_password1_helptext">
+  <div class="help"><ul><li>Your password can’t be too similar to your other personal information.</li><li>Your password must contain at least 10 characters.</li><li>Your password can’t be a commonly used password.</li><li>Your password can’t be entirely numeric.</li></ul></div>
+  
+</div>
+
+          <div class="field">
+  <label for="id_new_password2">New password confirmation</label>
+  <input type="password" name="new_password2" autocomplete="new-password" class="input" id="id_new_password2" aria-describedby="id_new_password2_helptext">
+  <div class="help">Enter the same password as before, for verification.</div>
+  
+</div>
+
+        </div>
+        <button class="btn btn-primary btn-sm" type="submit">Change password</button>
+      </form>
+    </section>
+  </div>
+
+  <section class="card">
+    <div class="card-head"><h2>Recent activity</h2></div>
+    <ul class="events">
+      <li class="muted">No activity yet.</li>
+    </ul>
+    <p class="muted" style="font-size:.88rem;margin:14px 0 0">Don't recognise something? Change your password and contact support.</p>
+  </section>
+</div>
+
+  </main>
+</div>
+<script src="/static/ci/js/site.js" defer></script>
+
+</body>
+</html>

@@ -1,0 +1,24 @@
+{% extends "accounts/auth_base.html" %}
+{% block title %}Create account{% endblock %}
+{% block head %}<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>{% endblock %}
+{% block side %}
+<h2>Start with one service. Add the rest when you need them.</h2>
+<p>Create a free account to order hosting or email, start a software project or book a marketing audit.</p>
+{% endblock %}
+{% block content %}
+<h1>Create your account</h1>
+<p>It takes a minute. You can add services afterwards.</p>
+<form method="post" novalidate>
+  {% csrf_token %}
+  {% if form.non_field_errors %}<div class="form-error">{{ form.non_field_errors }}</div>{% endif %}
+  {% include "partials/field.html" with f=form.first_name %}
+  {% include "partials/field.html" with f=form.company %}
+  {% include "partials/field.html" with f=form.email %}
+  {% include "partials/field.html" with f=form.password %}
+  <div class="check-row">{{ form.terms }}<label for="id_terms">{{ form.terms.label }}</label></div>
+  {{ form.terms.errors }}
+  {% include "partials/turnstile.html" %}
+  <button class="btn btn-primary btn-block" type="submit">Create account</button>
+</form>
+<p class="auth-alt">Already have an account? <a href="{% url 'accounts:login' %}">Sign in</a></p>
+{% endblock %}

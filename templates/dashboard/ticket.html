@@ -1,0 +1,36 @@
+{% extends "dashboard/base.html" %}
+{% block title %}Ticket #{{ ticket.pk }}{% endblock %}
+{% block heading %}{{ ticket.subject }}{% endblock %}
+{% block sub %}<p class="sub">Ticket #{{ ticket.pk }}, {{ ticket.get_category_display }}{% if ticket.service %}, {{ ticket.service.name }}{% endif %}</p>{% endblock %}
+{% block actions %}{% include "dashboard/_status.html" with s=ticket.status label=ticket.get_status_display %}{% endblock %}
+{% block content %}
+<div class="grid g-main">
+  <section class="card">
+    <div class="thread">
+      {% for m in ticket.messages.all %}
+      <div class="msg {% if not m.from_staff %}me{% endif %}">
+        <small>{% if m.from_staff %}CloudInovater team{% else %}You{% endif %}, {{ m.created|date:"j M, H:i" }}</small>
+        <p>{{ m.body }}</p>
+      </div>
+      {% endfor %}
+    </div>
+    <form method="post" style="margin-top:24px" novalidate>
+      {% csrf_token %}
+      {% include "partials/field.html" with f=form.body %}
+      <button class="btn btn-primary" type="submit">Send reply</button>
+    </form>
+  </section>
+  <aside class="card">
+    <div class="card-head"><h2>Details</h2></div>
+    <table class="table"><tbody>
+      <tr><td class="muted">Priority</td><td>{{ ticket.get_priority_display }}</td></tr>
+      <tr><td class="muted">Opened</td><td>{{ ticket.created|date:"j M Y, H:i" }}</td></tr>
+      <tr><td class="muted">Last update</td><td>{{ ticket.updated|date:"j M Y, H:i" }}</td></tr>
+    </tbody></table>
+    {% if ticket.status != "resolved" %}
+    <form method="post" style="margin-top:16px">{% csrf_token %}<input type="hidden" name="action" value="resolve"><button class="btn btn-ghost btn-sm btn-block" type="submit">Mark as resolved</button></form>
+    {% endif %}
+    <p style="margin-top:16px"><a href="{% url 'dashboard:support' %}">All tickets</a></p>
+  </aside>
+</div>
+{% endblock %}

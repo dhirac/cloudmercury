@@ -1,0 +1,265 @@
+{% load static %}<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% if site.gtm_id %}<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','{{ site.gtm_id|escapejs }}');</script>{% endif %}
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="{{ site.dark_color }}">
+  <title>{{ site.seo_title|default:site.site_name }}</title>
+  <meta name="description" content="{{ site.seo_description }}">
+  {% if site.favicon %}<link rel="icon" href="{{ site.favicon.url }}">{% else %}
+  <link rel="icon" type="image/svg+xml" href="{% static 'ci/img/cloudmercury-mark.svg' %}">
+  <link rel="icon" type="image/png" href="{% static 'ci/img/favicon.png' %}">{% endif %}
+  <link rel="apple-touch-icon" href="{% static 'ci/img/apple-touch-icon.png' %}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'ci/css/site.css' %}">
+  <style>:root { --violet: {{ site.primary_color }}; --orange: {{ site.accent_color }}; --night: {{ site.dark_color }}; }</style>
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+</head>
+<body>
+{% if site.gtm_id %}<noscript><iframe src="https://www.googletagmanager.com/ns.html?id={{ site.gtm_id|urlencode }}" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>{% endif %}
+
+{% if messages %}
+<div class="flashes" role="status">{% for m in messages %}<div class="flash {{ m.tags }}"><span>{{ m }}</span><button type="button" aria-label="Close" onclick="this.parentElement.remove()">×</button></div>{% endfor %}</div>
+{% endif %}
+
+<header class="nav" id="nav">
+  <div class="wrap nav-inner">
+    <a href="#top" class="logo"><img src="{% if site.logo %}{{ site.logo.url }}{% else %}{% static 'ci/img/cloudmercury-logo.svg' %}{% endif %}" alt="{{ site.site_name }}" width="235" height="46"></a>
+    <nav class="menu" aria-label="Main">
+      {% if site.show_about %}<a href="#about">About</a>{% endif %}
+      <a href="#services">Services</a>
+      {% if site.show_process and steps %}<a href="#process">How we work</a>{% endif %}
+      {% if site.show_faq and faqs %}<a href="#faq">FAQ</a>{% endif %}
+      <a href="#contact">Contact</a>
+    </nav>
+    {% if site.nav_cta %}<a class="btn btn-primary" href="#contact">{{ site.nav_cta }}</a>{% endif %}
+    <button class="nav-toggle" aria-label="Open menu" aria-expanded="false" id="navToggle">{% include "partials/icon.html" with name="menu" size=28 %}</button>
+  </div>
+</header>
+
+<main id="top">
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap hero-grid{% if not site.show_hero_visual %} hero-solo{% endif %}">
+      <div>
+        <h1>{{ site.hero_title }}{% if site.hero_highlight %} <em>{{ site.hero_highlight }}</em>{% endif %}</h1>
+        {% if site.hero_lead %}<p class="hero-lead">{{ site.hero_lead }}</p>{% endif %}
+        <div class="hero-cta">
+          {% if site.hero_cta_primary %}<a class="btn btn-primary" href="#contact">{{ site.hero_cta_primary }} {% include "partials/icon.html" with name="arrow" size=18 %}</a>{% endif %}
+          {% if site.hero_cta_secondary %}<a class="btn btn-outline" href="#services">{{ site.hero_cta_secondary }}</a>{% endif %}
+        </div>
+        <div class="hero-tags">
+          {% for s in services %}<span><i class="dot-{{ s.color }}"></i>{{ s.title }}</span>{% endfor %}
+        </div>
+      </div>
+
+      {% if site.show_hero_visual %}
+      <div class="stage" aria-hidden="true">
+        <div class="browser">
+          <div class="browser-bar"><i></i><i></i><i></i><span>{% include "partials/icon.html" with name="lock" size=12 %}yourbusiness.com</span></div>
+          <div class="browser-body">
+            <div class="bb-head"><b>{{ site.hero_card_title }}</b><small>Last 6 months</small></div>
+            <div class="bb-chart">
+              <svg viewBox="0 0 400 120" preserveAspectRatio="none"><defs><linearGradient id="ar" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="{{ site.primary_color }}" stop-opacity=".35"/><stop offset="1" stop-color="{{ site.primary_color }}" stop-opacity="0"/></linearGradient></defs><path d="M0 100 C40 96 60 88 100 84 S160 70 200 62 S270 52 300 38 S360 22 400 12 V120 H0Z" fill="url(#ar)"/><path d="M0 100 C40 96 60 88 100 84 S160 70 200 62 S270 52 300 38 S360 22 400 12" fill="none" stroke="{{ site.primary_color }}" stroke-width="3"/></svg>
+            </div>
+            <div class="bb-row">
+              <div class="bb-stat">{{ site.hero_stat1_label }}<b>{{ site.hero_stat1_value }}</b></div>
+              <div class="bb-stat">{{ site.hero_stat2_label }}<b>{{ site.hero_stat2_value }}</b></div>
+              <div class="bb-stat">{{ site.hero_stat3_label }}<b>{{ site.hero_stat3_value }}</b></div>
+            </div>
+          </div>
+        </div>
+        {% if site.hero_float1_title %}<div class="float f1"><span class="ic tint-pink">{% include "partials/icon.html" with name="chart" size=20 %}</span><div><b>{{ site.hero_float1_title }}</b>{{ site.hero_float1_text }}</div></div>{% endif %}
+        {% if site.hero_float2_title %}<div class="float f2"><span class="ic tint-teal">{% include "partials/icon.html" with name="mail" size=20 %}</span><div><b>{{ site.hero_float2_title }}</b>{{ site.hero_float2_text }}</div></div>{% endif %}
+        {% if site.hero_float3_title %}<div class="float f3"><span class="ic tint-blue">{% include "partials/icon.html" with name="shield" size=20 %}</span><div><b>{{ site.hero_float3_title }}</b>{{ site.hero_float3_text }}</div></div>{% endif %}
+      </div>
+      {% endif %}
+    </div>
+  </section>
+
+  {% if site.tech_items %}
+  <div class="strip"><div class="wrap">{% if site.tech_title %}<b>{{ site.tech_title }}</b>{% endif %}{% for t in site.tech_items %}<span>{{ t }}</span>{% endfor %}</div></div>
+  {% endif %}
+
+  <!-- ABOUT -->
+  {% if site.show_about %}
+  <section class="section" id="about">
+    <div class="wrap about">
+      <div class="about-text">
+        {% if site.about_kicker %}<span class="kicker">{{ site.about_kicker }}</span>{% endif %}
+        <h2>{{ site.about_title }}</h2>
+        {% if site.about_intro %}<p class="big">{{ site.about_intro }}</p>{% endif %}
+        {% for p in site.about_paragraphs %}<p>{{ p|linebreaksbr }}</p>{% endfor %}
+        {% if values %}
+        <div class="values">
+          {% for v in values %}
+          <div class="value"><span class="ic tint-{{ v.color }}">{% include "partials/icon.html" with name=v.icon %}</span><div><h3>{{ v.title }}</h3><p>{{ v.text }}</p></div></div>
+          {% endfor %}
+        </div>
+        {% endif %}
+      </div>
+      <div class="about-visual">
+        <h3>{{ site.trust_title }}</h3>
+        {% if site.trust_text %}<p>{{ site.trust_text }}</p>{% endif %}
+        {% if stats %}<div class="nums">{% for s in stats %}<div class="num"><b>{{ s.value }}</b><span>{{ s.label }}</span></div>{% endfor %}</div>{% endif %}
+      </div>
+    </div>
+  </section>
+  {% endif %}
+
+  <!-- SERVICES -->
+  <section class="section services" id="services">
+    <div class="wrap">
+      <div class="head">
+        {% if site.services_kicker %}<span class="kicker">{{ site.services_kicker }}</span>{% endif %}
+        <h2>{{ site.services_title }}</h2>
+        {% if site.services_lead %}<p>{{ site.services_lead }}</p>{% endif %}
+      </div>
+      <div class="svc-grid">
+        {% for s in services %}
+        <article class="svc {{ s.color }}">
+          {% if s.badge %}<span class="soon">{{ s.badge }}</span>{% endif %}
+          <span class="ic">{% include "partials/icon.html" with name=s.icon size=28 %}</span>
+          <h3>{{ s.title }}</h3>
+          <p>{{ s.text }}</p>
+          {% if s.bullet_items %}<ul>{% for b in s.bullet_items %}<li>{% include "partials/icon.html" with name="check" size=16 %}{{ b }}</li>{% endfor %}</ul>{% endif %}
+          {% if s.link_text %}<a class="more" href="#contact">{{ s.link_text }} {% include "partials/icon.html" with name="arrow" size=16 %}</a>{% endif %}
+        </article>
+        {% endfor %}
+      </div>
+      {% if extra_services %}
+      <div class="extra">
+        {% for s in extra_services %}
+        <div class="card"><span class="ic tint-{{ s.color }}">{% include "partials/icon.html" with name=s.icon size=26 %}</span><div><h3>{{ s.title }}</h3><p>{{ s.text }}</p></div></div>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  {% if site.show_process and steps %}
+  <section class="section process" id="process">
+    <div class="wrap">
+      <div class="head">
+        {% if site.process_kicker %}<span class="kicker">{{ site.process_kicker }}</span>{% endif %}
+        <h2>{{ site.process_title }}</h2>
+        {% if site.process_lead %}<p>{{ site.process_lead }}</p>{% endif %}
+      </div>
+      <div class="steps steps-{{ steps|length }}">
+        {% for s in steps %}<div class="step"><h3>{{ s.title }}</h3><p>{{ s.text }}</p></div>{% endfor %}
+      </div>
+    </div>
+  </section>
+  {% endif %}
+
+  <!-- WHY -->
+  {% if site.show_why %}
+  <section class="section" id="why">
+    <div class="wrap">
+      <div class="head">
+        {% if site.why_kicker %}<span class="kicker">{{ site.why_kicker }}</span>{% endif %}
+        <h2>{{ site.why_title }}</h2>
+        {% if site.why_lead %}<p>{{ site.why_lead }}</p>{% endif %}
+      </div>
+      {% if why_cards %}
+      <div class="why">
+        {% for w in why_cards %}<div class="why-card"><span class="ic tint-{{ w.color }}">{% include "partials/icon.html" with name=w.icon size=26 %}</span><h3>{{ w.title }}</h3><p>{{ w.text }}</p></div>{% endfor %}
+      </div>
+      {% endif %}
+      {% if site.industry_items %}
+      <div class="industries" aria-label="Industries we serve">{% for i in site.industry_items %}<span>{{ i }}</span>{% endfor %}</div>
+      {% endif %}
+    </div>
+  </section>
+  {% endif %}
+
+  <!-- FAQ -->
+  {% if site.show_faq and faqs %}
+  <section class="section" id="faq" style="padding-top:0">
+    <div class="wrap">
+      <div class="head">{% if site.faq_kicker %}<span class="kicker">{{ site.faq_kicker }}</span>{% endif %}<h2>{{ site.faq_title }}</h2></div>
+      <div class="faq-wrap faq">
+        {% for f in faqs %}<details{% if forloop.first %} open{% endif %}><summary>{{ f.question }}</summary><p>{{ f.answer|linebreaksbr }}</p></details>{% endfor %}
+      </div>
+    </div>
+  </section>
+  {% endif %}
+
+  <!-- CTA -->
+  {% if site.show_cta %}
+  <section class="band">
+    <div class="wrap">
+      <div class="band-inner">
+        <div><h2>{{ site.cta_title }}</h2>{% if site.cta_text %}<p>{{ site.cta_text }}</p>{% endif %}</div>
+        {% if site.cta_button %}<a class="btn btn-white" href="#contact">{{ site.cta_button }} {% include "partials/icon.html" with name="arrow" size=18 %}</a>{% endif %}
+      </div>
+    </div>
+  </section>
+  {% endif %}
+
+  <!-- CONTACT -->
+  <section class="section contact" id="contact">
+    <div class="wrap contact-grid">
+      <div class="contact-info">
+        {% if site.contact_kicker %}<span class="kicker">{{ site.contact_kicker }}</span>{% endif %}
+        <h2>{{ site.contact_title }}</h2>
+        {% if site.contact_lead %}<p class="lead">{{ site.contact_lead }}</p>{% endif %}
+        <div class="info-list">
+          {% if site.email %}<div class="info"><span class="ic">{% include "partials/icon.html" with name="mail" %}</span><div><b>Email</b><a href="mailto:{{ site.email }}">{{ site.email }}</a></div></div>{% endif %}
+          {% if site.phone %}<div class="info"><span class="ic">{% include "partials/icon.html" with name="phone" %}</span><div><b>Phone</b><a href="tel:{{ site.phone|cut:' ' }}">{{ site.phone }}</a></div></div>{% endif %}
+          {% if site.address1 %}<div class="info"><span class="ic">{% include "partials/icon.html" with name="pin" %}</span><div><b>{{ site.address1_title }}</b><span>{{ site.address1 }}</span></div></div>{% endif %}
+          {% if site.address2 %}<div class="info"><span class="ic">{% include "partials/icon.html" with name="globe" %}</span><div><b>{{ site.address2_title }}</b><span>{{ site.address2 }}</span></div></div>{% endif %}
+        </div>
+      </div>
+      <form class="form-card" method="post" action="{% url 'landing' %}#contact" novalidate>
+        {% csrf_token %}
+        {% if form.non_field_errors %}<div class="form-error">{{ form.non_field_errors }}</div>{% endif %}
+        <div class="row2">
+          {% include "partials/field.html" with f=form.name %}
+          {% include "partials/field.html" with f=form.email %}
+        </div>
+        {% include "partials/field.html" with f=form.subject %}
+        {% include "partials/field.html" with f=form.message %}
+        {% include "partials/turnstile.html" %}
+        <button class="btn btn-primary" type="submit">Send message {% include "partials/icon.html" with name="arrow" size=18 %}</button>
+        {% if site.form_note %}<p class="form-note">{{ site.form_note }}</p>{% endif %}
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <a href="#top" class="logo"><img src="{% if site.logo_light %}{{ site.logo_light.url }}{% else %}{% static 'ci/img/cloudmercury-logo-light.svg' %}{% endif %}" alt="{{ site.site_name }}" width="215" height="42"></a>
+        {% if site.footer_text %}<p>{{ site.footer_text }}</p>{% endif %}
+      </div>
+      <div><h4>Services</h4><ul>{% for s in services %}<li><a href="#services">{{ s.title }}</a></li>{% endfor %}</ul></div>
+      <div><h4>Company</h4><ul>{% if site.show_about %}<li><a href="#about">About us</a></li>{% endif %}{% if site.show_process and steps %}<li><a href="#process">How we work</a></li>{% endif %}{% if site.show_faq and faqs %}<li><a href="#faq">FAQ</a></li>{% endif %}<li><a href="#contact">Contact</a></li></ul></div>
+      <div><h4>Get in touch</h4><ul>
+        {% if site.email %}<li><a href="mailto:{{ site.email }}">{{ site.email }}</a></li>{% endif %}
+        {% if site.phone %}<li><a href="tel:{{ site.phone|cut:' ' }}">{{ site.phone }}</a></li>{% endif %}
+        {% for name, url in site.socials %}<li><a href="{{ url }}" target="_blank" rel="noopener">{{ name }}</a></li>{% endfor %}
+      </ul></div>
+    </div>
+    <div class="footer-base"><span>© {% now "Y" %} {{ site.site_name }}. All rights reserved.</span>{% if site.footer_note %}<span>{{ site.footer_note }}</span>{% endif %}</div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var nav = document.getElementById("nav"), t = document.getElementById("navToggle");
+  function s() { nav.classList.toggle("scrolled", window.scrollY > 10); }
+  window.addEventListener("scroll", s, { passive: true }); s();
+  t.addEventListener("click", function () { var o = nav.classList.toggle("open"); t.setAttribute("aria-expanded", o); });
+  nav.querySelectorAll(".menu a").forEach(function (a) { a.addEventListener("click", function () { nav.classList.remove("open"); }); });
+  setTimeout(function () { document.querySelectorAll(".flash").forEach(function (f) { f.remove(); }); }, 8000);
+})();
+</script>
+</body>
+</html>

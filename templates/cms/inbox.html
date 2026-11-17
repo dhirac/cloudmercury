@@ -1,0 +1,32 @@
+{% extends "cms/base.html" %}
+{% block title %}Messages{% endblock %}
+{% block heading %}Messages{% endblock %}
+{% block sub %}<p class="sub">Everything sent through the contact form on your website.</p>{% endblock %}
+{% block actions %}{% if unread %}<form method="post" action="{% url 'cms:inbox_mark_all' %}">{% csrf_token %}<button class="btn btn-ghost btn-sm">Mark all as read</button></form>{% endif %}{% endblock %}
+{% block content %}
+<div class="inbox-tools">
+  <nav class="tabs">
+    <a href="?show=all{% if q %}&q={{ q|urlencode }}{% endif %}" class="{% if show != 'unread' %}on{% endif %}">All</a>
+    <a href="?show=unread{% if q %}&q={{ q|urlencode }}{% endif %}" class="{% if show == 'unread' %}on{% endif %}">Unread{% if unread %} ({{ unread }}){% endif %}</a>
+  </nav>
+  <form class="search" method="get"><input type="hidden" name="show" value="{{ show }}"><input class="input" name="q" value="{{ q }}" placeholder="Search name, email or text" aria-label="Search messages"><button class="btn btn-ghost btn-sm">Search</button></form>
+</div>
+<section class="card">
+  {% for m in page %}
+  <a class="msg-row{% if not m.is_read %} new{% endif %}" href="{% url 'cms:message' m.pk %}">
+    <i class="dot"></i>
+    <div><b>{{ m.name }}</b> <span>{{ m.email }}, {{ m.subject }}</span><span class="snip">{{ m.message|truncatechars:120 }}</span></div>
+    <span>{{ m.created|date:"j M Y, H:i" }}</span>
+  </a>
+  {% empty %}
+  <div class="empty"><div class="shield">{% include "partials/icon.html" with name="mail" %}</div><h3>{% if q or show == 'unread' %}No matching messages{% else %}No messages yet{% endif %}</h3><p>{% if q or show == 'unread' %}Try another search or show all messages.{% else %}When someone uses the contact form on your website, their message appears here.{% endif %}</p></div>
+  {% endfor %}
+</section>
+{% if page.paginator.num_pages > 1 %}
+<div class="pager">
+  {% if page.has_previous %}<a class="btn btn-ghost btn-sm" href="?show={{ show }}&q={{ q|urlencode }}&page={{ page.previous_page_number }}">Newer</a>{% endif %}
+  <span>Page {{ page.number }} of {{ page.paginator.num_pages }}</span>
+  {% if page.has_next %}<a class="btn btn-ghost btn-sm" href="?show={{ show }}&q={{ q|urlencode }}&page={{ page.next_page_number }}">Older</a>{% endif %}
+</div>
+{% endif %}
+{% endblock %}

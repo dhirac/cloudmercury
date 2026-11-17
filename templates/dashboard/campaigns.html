@@ -1,0 +1,36 @@
+{% extends "dashboard/base.html" %}
+{% load humanize %}
+{% block title %}Marketing{% endblock %}
+{% block heading %}Marketing{% endblock %}
+{% block sub %}<p class="sub">Results from every campaign we run for you.</p>{% endblock %}
+{% block actions %}<a class="btn btn-primary btn-sm" href="{% url 'dashboard:order' %}?category=marketing">{% include "partials/icon.html" with name="plus" size=16 %}New campaign</a>{% endblock %}
+{% block content %}
+{% if campaigns %}
+<div class="grid g-4" style="margin-bottom:20px">
+  <div class="card kpi accent"><div class="k-label">Leads</div><div class="k-val">{{ totals.leads|default:0|intcomma }}</div></div>
+  <div class="card kpi"><div class="k-label">Spent</div><div class="k-val">€{{ totals.spent|default:0|floatformat:0|intcomma }}</div></div>
+  <div class="card kpi"><div class="k-label">Clicks</div><div class="k-val">{{ totals.clicks|default:0|intcomma }}</div></div>
+  <div class="card kpi"><div class="k-label">Impressions</div><div class="k-val">{{ totals.impressions|default:0|intcomma }}</div></div>
+</div>
+<section class="card">
+  <div class="table-wrap"><table class="table">
+    <thead><tr><th>Campaign</th><th>Channel</th><th>Status</th><th>Leads per week</th><th class="num">Leads</th><th class="num">Cost per lead</th><th>Budget used</th></tr></thead>
+    <tbody>
+    {% for c in campaigns %}
+    <tr>
+      <td><b>{{ c.name }}</b></td>
+      <td>{{ c.get_channel_display }}</td>
+      <td>{% include "dashboard/_status.html" with s=c.status label=c.get_status_display %}</td>
+      <td style="color:var(--cobalt)"><svg viewBox="0 0 120 32" width="110" height="30">{% if c.sparkline_points %}<polyline points="{{ c.sparkline_points }}" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>{% endif %}</svg></td>
+      <td class="num">{{ c.leads|intcomma }}</td>
+      <td class="num">{% if c.cost_per_lead %}€{{ c.cost_per_lead }}{% else %}–{% endif %}</td>
+      <td style="min-width:150px"><div class="usage-l"><span>€{{ c.spent|floatformat:0 }}</span><span>of €{{ c.budget|floatformat:0 }}</span></div><div class="meter"><i style="width:{{ c.spend_pct }}%"></i></div></td>
+    </tr>
+    {% endfor %}
+    </tbody>
+  </table></div>
+</section>
+{% else %}
+<section class="card"><div class="empty"><div class="shield">{% include "partials/icon.html" with name="chart" %}</div><h3>No campaigns yet</h3><p>Ask for a free marketing audit. We'll look at your site, search rankings and ads, and suggest where to start.</p><a class="btn btn-primary btn-sm" href="{% url 'dashboard:order' %}?category=marketing&plan=growth">Request a free audit</a></div></section>
+{% endif %}
+{% endblock %}

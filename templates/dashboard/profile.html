@@ -1,0 +1,16 @@
+{% extends "cms/base.html" %}
+{% block title %}Profile{% endblock %}
+{% block heading %}Profile{% endblock %}
+{% block sub %}<p class="sub">Contact details we use for invoices and support.</p>{% endblock %}
+{% block content %}
+<form class="card" method="post" novalidate style="max-width:640px">
+  {% csrf_token %}
+  {% include "partials/field.html" with f=form.first_name %}
+  {% include "partials/field.html" with f=form.email %}
+  <div class="grid g-2" style="gap:16px">
+    {% include "partials/field.html" with f=form.company %}
+    {% include "partials/field.html" with f=form.phone %}
+  </div>
+  <button class="btn btn-primary" type="submit">Save profile</button>
+</form>
+{% endblock %}

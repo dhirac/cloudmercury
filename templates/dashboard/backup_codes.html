@@ -1,0 +1,15 @@
+{% extends "cms/base.html" %}
+{% block title %}Backup codes{% endblock %}
+{% block heading %}Save your backup codes{% endblock %}
+{% block sub %}<p class="sub">Two-factor is on. Keep these codes somewhere safe.</p>{% endblock %}
+{% block content %}
+<section class="card" style="max-width:560px">
+  <p>If you lose your phone, each of these codes lets you sign in once. <b>This is the only time we'll show them.</b></p>
+  <div class="codes" id="codes">{% for c in codes %}<code>{{ c }}</code>{% endfor %}</div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap">
+    <button type="button" class="btn btn-ghost btn-sm" data-copy="#codes">Copy codes</button>
+    <button type="button" class="btn btn-ghost btn-sm" onclick="window.print()">Print</button>
+    <a class="btn btn-primary btn-sm" href="{% url 'accounts:security' %}">I've saved my codes</a>
+  </div>
+</section>
+{% endblock %}

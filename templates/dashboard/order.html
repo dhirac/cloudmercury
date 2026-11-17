@@ -1,0 +1,26 @@
+{% extends "dashboard/base.html" %}
+{% block title %}Order a service{% endblock %}
+{% block heading %}Order a service{% endblock %}
+{% block sub %}<p class="sub">Tell us what you need. We confirm the setup and price within one business day.</p>{% endblock %}
+{% block content %}
+<div class="grid g-main">
+  <form class="card" method="post" novalidate>
+    {% csrf_token %}
+    {% if form.non_field_errors %}<div class="form-error">{{ form.non_field_errors }}</div>{% endif %}
+    {% include "partials/field.html" with f=form.category %}
+    {% include "partials/field.html" with f=form.plan %}
+    {% include "partials/field.html" with f=form.domain %}
+    {% include "partials/field.html" with f=form.notes %}
+    <button class="btn btn-primary" type="submit">Place order</button>
+  </form>
+  <aside class="card">
+    <div class="card-head"><h2>What happens next</h2></div>
+    <ol class="steps-v">
+      <li><div><b>We review your order</b><p class="muted" style="margin:0">Usually within a few hours on business days.</p></div></li>
+      <li><div><b>You confirm the price</b><p class="muted" style="margin:0">We send an invoice you can pay from Billing.</p></div></li>
+      <li><div><b>We set everything up</b><p class="muted" style="margin:0">Including free migration from your current provider.</p></div></li>
+    </ol>
+  </aside>
+</div>
+{{ plans|json_script:"plans-data" }}
+{% endblock %}

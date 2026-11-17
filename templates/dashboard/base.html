@@ -1,0 +1,49 @@
+{% load static %}<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% include "partials/head.html" %}
+  <title>{% block title %}Dashboard{% endblock %} – CloudInovater</title>
+  <meta name="robots" content="noindex">
+  {% block head %}{% endblock %}
+</head>
+<body>
+{% include "partials/messages.html" %}
+<div class="portal">
+  <aside class="side" aria-label="Dashboard menu">
+    <a href="/" class="brand">{% include "partials/brand.html" %}CloudInovater</a>
+    <nav>
+      <a href="{% url 'dashboard:overview' %}" class="{% if active == 'overview' %}on{% endif %}">{% include "partials/icon.html" with name="home" %}Overview</a>
+      <a href="{% url 'dashboard:services' %}" class="{% if active == 'services' %}on{% endif %}">{% include "partials/icon.html" with name="server" %}Hosting & services</a>
+      <a href="{% url 'dashboard:projects' %}" class="{% if active == 'projects' %}on{% endif %}">{% include "partials/icon.html" with name="code" %}Software projects</a>
+      <a href="{% url 'dashboard:campaigns' %}" class="{% if active == 'campaigns' %}on{% endif %}">{% include "partials/icon.html" with name="chart" %}Marketing</a>
+      <a href="{% url 'dashboard:billing' %}" class="{% if active == 'billing' %}on{% endif %}">{% include "partials/icon.html" with name="card" %}Billing</a>
+      <a href="{% url 'dashboard:support' %}" class="{% if active == 'support' %}on{% endif %}">{% include "partials/icon.html" with name="help" %}Support</a>
+      <div class="side-label">Account</div>
+      <a href="{% url 'accounts:profile' %}" class="{% if active == 'profile' %}on{% endif %}">{% include "partials/icon.html" with name="user" %}Profile</a>
+      <a href="{% url 'accounts:security' %}" class="{% if active == 'security' %}on{% endif %}">{% include "partials/icon.html" with name="shield" %}Security{% if not user.profile.totp_enabled %}<span class="count" title="Two-factor is off">!</span>{% endif %}</a>
+      {% if user.is_staff %}<a href="{% url 'admin:index' %}">{% include "partials/icon.html" with name="key" %}Admin</a>{% endif %}
+    </nav>
+    <div class="side-foot">
+      <div class="side-user">
+        <div class="avatar">{{ user.first_name|default:user.email|slice:":1"|upper }}</div>
+        <div><b>{{ user.first_name|default:user.username }}</b><span>{{ user.profile.company|default:user.email|truncatechars:26 }}</span></div>
+      </div>
+      <form method="post" action="{% url 'accounts:logout' %}">{% csrf_token %}<button type="submit">Sign out</button></form>
+    </div>
+  </aside>
+  <main class="main">
+    <div class="topbar">
+      <button class="menu-btn" data-menu aria-label="Open menu">{% include "partials/icon.html" with name="menu" %}</button>
+      <div>
+        <h1>{% block heading %}{% endblock %}</h1>
+        {% block sub %}{% endblock %}
+      </div>
+      <div class="topbar-actions">{% block actions %}{% endblock %}</div>
+    </div>
+    {% block content %}{% endblock %}
+  </main>
+</div>
+<script src="{% static 'ci/js/site.js' %}" defer></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

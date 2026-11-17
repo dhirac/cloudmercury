@@ -1,0 +1,30 @@
+{% extends "cms/base.html" %}
+{% block title %}{% if obj %}Edit {{ singular }}{% else %}Add {{ singular }}{% endif %}{% endblock %}
+{% block crumb %}<div class="crumb"><a href="{% url 'cms:section' section_slug %}">{{ section_label }}</a></div>{% endblock %}
+{% block heading %}{% if obj %}Edit {{ singular }}{% else %}Add a {{ singular }}{% endif %}{% endblock %}
+{% block content %}
+<form method="post" novalidate style="max-width:820px">
+  {% csrf_token %}
+  {% if form.non_field_errors %}<div class="form-error">{{ form.non_field_errors }}</div>{% endif %}
+  <section class="group">
+    <div class="fgrid">
+      {% for f in form %}
+        {% if f.field.widget.input_type == "checkbox" %}
+          <div class="wide"><div class="toggle">{{ f }}<label for="{{ f.id_for_label }}">{{ f.label }}</label></div></div>
+        {% else %}
+          <div class="field{% if 'textarea' in f.field.widget.attrs.class or f.name == 'title' or f.name == 'question' %} wide{% endif %}">
+            <label for="{{ f.id_for_label }}">{{ f.label }}</label>
+            {{ f }}
+            {% if f.help_text %}<div class="help">{{ f.help_text }}</div>{% endif %}
+            {{ f.errors }}
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </section>
+  <div class="savebar">
+    <button class="btn btn-primary" type="submit">{% if obj %}Save changes{% else %}Add {{ singular }}{% endif %}</button>
+    <a class="btn btn-ghost" href="{% url 'cms:section' section_slug %}">Cancel</a>
+  </div>
+</form>
+{% endblock %}

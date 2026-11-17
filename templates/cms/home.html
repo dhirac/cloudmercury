@@ -1,0 +1,58 @@
+{% extends "cms/base.html" %}
+{% block title %}Overview{% endblock %}
+{% block heading %}Hello, {{ user.first_name|default:user.username }}{% endblock %}
+{% block sub %}<p class="sub">Manage your website content and read messages from visitors.</p>{% endblock %}
+{% block actions %}<a class="btn btn-primary btn-sm" href="/" target="_blank" rel="noopener">{% include "partials/icon.html" with name="external" size=16 %}View website</a>{% endblock %}
+{% block content %}
+<div class="grid g-4" style="margin-bottom:20px">
+  <a class="card kpi accent" href="{% url 'cms:inbox' %}?show=unread" style="text-decoration:none">
+    <div class="k-label">Unread messages</div><div class="k-val">{{ unread }}</div><div class="k-foot">Open the inbox</div>
+  </a>
+  <div class="card kpi"><div class="k-label">Messages, last 30 days</div><div class="k-val">{{ month_messages }}</div><div class="k-foot">{{ total_messages }} in total</div></div>
+  <div class="card kpi"><div class="k-label">Services shown</div><div class="k-val">{{ services_count }}</div><div class="k-foot"><a href="{% url 'cms:section' 'services' %}">Edit services</a></div></div>
+  <div class="card kpi"><div class="k-label">FAQ questions</div><div class="k-val">{{ faq_count }}</div><div class="k-foot"><a href="{% url 'cms:section' 'faq' %}">Edit FAQ</a></div></div>
+</div>
+
+<div class="grid g-main">
+  <div class="grid">
+    <section class="card">
+      <div class="card-head"><h2>Edit your website</h2></div>
+      <div class="quick">
+        {% for slug, label, icon in cms_sections %}
+        <a href="{% url 'cms:section' slug %}"><span class="qi">{% include "partials/icon.html" with name=icon size=18 %}</span>{{ label }}</a>
+        {% endfor %}
+      </div>
+    </section>
+    <section class="card">
+      <div class="card-head"><h2>Latest messages</h2><a href="{% url 'cms:inbox' %}">All messages</a></div>
+      {% for m in recent %}
+      <a class="msg-row{% if not m.is_read %} new{% endif %}" href="{% url 'cms:message' m.pk %}">
+        <i class="dot"></i>
+        <div><b>{{ m.name }}</b> <span>{{ m.subject }}</span><span class="snip">{{ m.message|truncatechars:90 }}</span></div>
+        <span>{{ m.created|date:"j M, H:i" }}</span>
+      </a>
+      {% empty %}
+      <p class="muted" style="margin:0">No messages yet. Messages from the contact form on your website appear here.</p>
+      {% endfor %}
+    </section>
+  </div>
+  <div class="grid">
+    <section class="card">
+      <div class="card-head"><h2>Account security</h2></div>
+      {% if cms_two_factor_on %}
+        <div class="sec-status on"><div class="shield">{% include "partials/icon.html" with name="shield" %}</div><div><b>Two-factor sign-in is on</b><p class="muted" style="margin:0;font-size:.9rem">Everyone needs a code from their app to sign in.</p></div></div>
+      {% else %}
+        <div class="sec-status off"><div class="shield">{% include "partials/icon.html" with name="lock" %}</div><div><b>Two-factor sign-in is off</b><p class="muted" style="margin:0 0 .6rem;font-size:.9rem">Sign-in needs a password and the security check.</p><a class="btn btn-ghost btn-sm" href="{% url 'accounts:security' %}">Security settings</a></div></div>
+      {% endif %}
+    </section>
+    <section class="card">
+      <div class="card-head"><h2>Website</h2></div>
+      <table class="table"><tbody>
+        <tr><td class="muted">Name</td><td>{{ site.site_name }}</td></tr>
+        <tr><td class="muted">Contact email</td><td>{{ site.email|default:"Not set" }}</td></tr>
+        <tr><td class="muted">Last edited</td><td>{{ site.updated|date:"j M Y, H:i" }}</td></tr>
+      </tbody></table>
+    </section>
+  </div>
+</div>
+{% endblock %}

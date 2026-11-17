@@ -1,0 +1,148 @@
+{% extends "dashboard/base.html" %}
+{% load humanize %}
+{% block title %}Overview{% endblock %}
+{% block heading %}{{ greeting }}, {{ user.first_name|default:user.username }}{% endblock %}
+{% block sub %}<p class="sub">Here's how your services are doing today.</p>{% endblock %}
+{% block actions %}<a class="btn btn-primary btn-sm" href="{% url 'dashboard:order' %}">{% include "partials/icon.html" with name="plus" size=16 %}Order a service</a>{% endblock %}
+{% block content %}
+
+{% if not checklist_done %}
+<section class="card checklist" style="margin-bottom:20px">
+  <div class="card-head"><h2>Finish setting up your account</h2></div>
+  <ol>
+    {% for c in checklist %}
+    <li class="{% if c.done %}done{% endif %}"><a href="{% url c.url %}"><span class="tick">{% if c.done %}{% include "partials/icon.html" with name="check" size=14 %}{% endif %}</span>{{ c.label }}</a></li>
+    {% endfor %}
+  </ol>
+</section>
+{% endif %}
+
+<div class="grid g-4" style="margin-bottom:20px">
+  <div class="card kpi accent">
+    <div class="k-label">Active services</div>
+    <div class="k-val">{{ services|length }}</div>
+    <div class="k-foot">€{{ month_spend|floatformat:2 }} a month</div>
+  </div>
+  <div class="card kpi">
+    <div class="k-label">Leads from campaigns</div>
+    <div class="k-val">{{ leads|intcomma }}</div>
+    <div class="k-foot">across {{ campaigns|length }} running campaign{{ campaigns|length|pluralize }}</div>
+  </div>
+  <div class="card kpi">
+    <div class="k-label">Open support tickets</div>
+    <div class="k-val">{{ open_ticket_count }}</div>
+    <div class="k-foot"><a href="{% url 'dashboard:support' %}">Go to support</a></div>
+  </div>
+  <div class="card kpi">
+    <div class="k-label">Amount due</div>
+    <div class="k-val">€{{ due_total|floatformat:2 }}</div>
+    <div class="k-foot">{% if due_invoices %}{{ due_invoices|length }} unpaid invoice{{ due_invoices|length|pluralize }}{% else %}You're all paid up{% endif %}</div>
+  </div>
+</div>
+
+<div class="grid g-main">
+  <div class="grid">
+    <section class="card">
+      <div class="card-head"><h2>Web hosting</h2><a href="{% url 'dashboard:services' %}?category=web_hosting">All hosting</a></div>
+      {% if hosting %}
+      <div class="res">
+        {% for s in hosting %}
+        <div class="res-row">
+          <a class="name" href="{% url 'dashboard:service' s.pk %}">{{ s.name }}</a>
+          {% include "dashboard/_status.html" with s=s.status label=s.get_status_display %}
+          <div class="meta"><span>{{ s.plan }} plan</span><span>{{ s.uptime_30d|floatformat:2 }}% uptime</span><span>{{ s.bandwidth_gb|floatformat:0 }} GB transfer this month</span></div>
+          <div class="usage">
+            <div>
+              <div class="usage-l"><span>Disk</span><span>{{ s.disk_used_gb|floatformat:1 }} of {{ s.disk_total_gb|floatformat:0 }} GB</span></div>
+              <div class="meter{% if s.disk_pct >= 90 %} bad{% elif s.disk_pct >= 75 %} warn{% endif %}"><i style="width:{{ s.disk_pct }}%"></i></div>
+            </div>
+            <div>
+              <div class="usage-l"><span>Renews</span><span>{{ s.renews_on|date:"j M Y"|default:"Not set" }}</span></div>
+              <div class="usage-l"><span>Price</span><span>€{{ s.price_monthly|floatformat:2 }}/month</span></div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="empty"><div class="shield">{% include "partials/icon.html" with name="server" %}</div><h3>No hosting yet</h3><p>Pick a plan and we'll set it up, including a free move from your current host.</p><a class="btn btn-primary btn-sm" href="{% url 'dashboard:order' %}?category=web_hosting">Choose a hosting plan</a></div>
+      {% endif %}
+    </section>
+
+    <section class="card">
+      <div class="card-head"><h2>Marketing campaigns</h2><a href="{% url 'dashboard:campaigns' %}">All campaigns</a></div>
+      {% for c in campaigns %}
+      <div class="camp">
+        <div><b>{{ c.name }}</b> {% include "dashboard/_status.html" with s=c.status label=c.get_status_display %}</div>
+        <svg class="spark" viewBox="0 0 120 32" width="120" height="32" aria-label="Leads per week">{% if c.sparkline_points %}<polyline points="{{ c.sparkline_points }}" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>{% endif %}</svg>
+        <div class="stats"><span>{{ c.get_channel_display }}</span><span>{{ c.leads }} leads</span><span>{% if c.cost_per_lead %}€{{ c.cost_per_lead }} per lead{% endif %}</span><span>{{ c.ctr }}% click rate</span></div>
+      </div>
+      {% empty %}
+      <div class="empty"><div class="shield">{% include "partials/icon.html" with name="chart" %}</div><h3>No campaigns running</h3><p>Book a free audit and we'll suggest where your marketing budget will work hardest.</p><a class="btn btn-primary btn-sm" href="{% url 'dashboard:order' %}?category=marketing">Request a marketing audit</a></div>
+      {% endfor %}
+    </section>
+
+    <section class="card">
+      <div class="card-head"><h2>Software projects</h2><a href="{% url 'dashboard:projects' %}">All projects</a></div>
+      {% for p in projects %}
+      <div class="res-row">
+        <b>{{ p.name }}</b><span class="muted" style="font-size:.88rem">{{ p.progress }}% done</span>
+        <div style="grid-column:1/-1">
+          <div class="track">{% for code, label in p.STAGES %}<i class="{% if forloop.counter0 < p.stage_index %}on{% elif forloop.counter0 == p.stage_index %}now{% endif %}"></i>{% endfor %}</div>
+          <div class="track-labels">{% for code, label in p.STAGES %}<span class="{% if forloop.counter0 == p.stage_index %}on{% endif %}">{{ label }}</span>{% endfor %}</div>
+        </div>
+        <div class="meta"><span>Next: {{ p.next_milestone|default:"To be planned" }}</span>{% if p.due %}<span>Due {{ p.due|date:"j M" }}</span>{% endif %}</div>
+      </div>
+      {% empty %}
+      <div class="empty"><div class="shield">{% include "partials/icon.html" with name="code" %}</div><h3>No projects in progress</h3><p>Have an app or SaaS idea? Start with a discovery workshop to scope it and get a fixed price.</p><a class="btn btn-primary btn-sm" href="{% url 'dashboard:order' %}?category=saas&plan=discovery">Start a project</a></div>
+      {% endfor %}
+    </section>
+  </div>
+
+  <div class="grid">
+    <section class="card">
+      <div class="card-head"><h2>Email</h2><a href="{% url 'dashboard:services' %}?category=email_hosting">Manage</a></div>
+      {% for s in email %}
+      <div class="res-row">
+        <b>{{ s.domain|default:s.name }}</b>{% include "dashboard/_status.html" with s=s.status label=s.get_status_display %}
+        <div style="grid-column:1/-1">
+          <div class="usage-l"><span>Mailboxes</span><span>{{ s.mailboxes_used }} of {{ s.mailboxes_total }}</span></div>
+          <div class="meter{% if s.mailbox_pct >= 90 %} bad{% elif s.mailbox_pct >= 75 %} warn{% endif %}"><i style="width:{{ s.mailbox_pct }}%"></i></div>
+        </div>
+        <div class="meta"><span>{{ s.plan }}</span><span>SPF, DKIM, DMARC set up</span></div>
+      </div>
+      {% empty %}
+      <p class="muted" style="margin:0 0 1rem">Get professional email on your own domain from €1.50 a mailbox.</p>
+      <a class="btn btn-ghost btn-sm" href="{% url 'dashboard:order' %}?category=email_hosting">Add business email</a>
+      {% endfor %}
+    </section>
+
+    <section class="card">
+      <div class="card-head"><h2>Upcoming renewals</h2></div>
+      {% if renewals %}
+      <table class="table"><tbody>
+        {% for s in renewals %}<tr><td>{{ s.name }}</td><td class="num">{{ s.renews_on|date:"j M" }}</td></tr>{% endfor %}
+      </tbody></table>
+      {% else %}<p class="muted" style="margin:0">Nothing renews in the coming weeks.</p>{% endif %}
+    </section>
+
+    <section class="card">
+      <div class="card-head"><h2>Support</h2><a href="{% url 'dashboard:support' %}?new=1">New ticket</a></div>
+      {% for t in open_tickets %}
+      <div class="res-row"><a class="name" href="{% url 'dashboard:ticket' t.pk %}">{{ t.subject }}</a>{% include "dashboard/_status.html" with s=t.status label=t.get_status_display %}<div class="meta"><span>#{{ t.pk }}</span><span>Updated {{ t.updated|naturaltime }}</span></div></div>
+      {% empty %}
+      <p class="muted" style="margin:0">No open tickets. Need help? Our team replies within 4 business hours.</p>
+      {% endfor %}
+    </section>
+
+    <section class="card">
+      <div class="card-head"><h2>Account security</h2></div>
+      {% if user.profile.totp_enabled %}
+        <div class="sec-status on"><div class="shield">{% include "partials/icon.html" with name="shield" %}</div><div><b>Two-factor is on</b><p class="muted" style="margin:0;font-size:.9rem">{{ user.profile.backup_codes_left }} backup codes left.</p></div></div>
+      {% else %}
+        <div class="sec-status off"><div class="shield">{% include "partials/icon.html" with name="lock" %}</div><div><b>Two-factor is off</b><p class="muted" style="margin:0 0 .6rem;font-size:.9rem">Add a second step to sign-in in about two minutes.</p><a class="btn btn-primary btn-sm" href="{% url 'accounts:setup_2fa' %}">Turn on two-factor</a></div></div>
+      {% endif %}
+    </section>
+  </div>
+</div>
+{% endblock %}

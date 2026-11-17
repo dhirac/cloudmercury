@@ -1,0 +1,29 @@
+{% extends "cms/base.html" %}
+{% block title %}Message from {{ m.name }}{% endblock %}
+{% block crumb %}<div class="crumb"><a href="{% url 'cms:inbox' %}">Messages</a></div>{% endblock %}
+{% block heading %}{{ m.subject }}{% endblock %}
+{% block actions %}{% with s="Re: "|add:m.subject %}<a class="btn btn-primary btn-sm" href="mailto:{{ m.email }}?subject={{ s|urlencode }}">{% include "partials/icon.html" with name="mail" size=16 %}Reply by email</a>{% endwith %}{% endblock %}
+{% block content %}
+<div class="grid g-main">
+  <article class="letter">
+    <div class="letter-head">
+      <div class="avatar">{{ m.name|slice:":1"|upper }}</div>
+      <div style="flex:1"><b style="font-size:1.05rem">{{ m.name }}</b><br><a href="mailto:{{ m.email }}">{{ m.email }}</a></div>
+      <span class="muted" style="font-size:.9rem">{{ m.created|date:"l j F Y, H:i" }}</span>
+    </div>
+    <div class="letter-body">{{ m.message }}</div>
+  </article>
+  <aside class="grid">
+    <form class="card" method="post">
+      {% csrf_token %}
+      <div class="card-head"><h2>Internal notes</h2></div>
+      {{ form.notes }}
+      <button class="btn btn-ghost btn-sm" style="margin-top:12px" type="submit">Save notes</button>
+    </form>
+    <div class="card">
+      <form method="post" style="margin-bottom:10px">{% csrf_token %}<input type="hidden" name="action" value="unread"><button class="btn btn-ghost btn-sm btn-block">Mark as unread</button></form>
+      <form method="post" onsubmit="return confirm('Delete this message? This can’t be undone.')">{% csrf_token %}<input type="hidden" name="action" value="delete"><button class="btn btn-ghost btn-sm btn-block" style="color:#C7372D">Delete message</button></form>
+    </div>
+  </aside>
+</div>
+{% endblock %}

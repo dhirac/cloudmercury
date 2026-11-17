@@ -1,0 +1,26 @@
+{% extends "dashboard/base.html" %}
+{% block title %}Software projects{% endblock %}
+{% block heading %}Software projects{% endblock %}
+{% block sub %}<p class="sub">Follow each build from discovery to launch.</p>{% endblock %}
+{% block actions %}<a class="btn btn-primary btn-sm" href="{% url 'dashboard:order' %}?category=saas&plan=discovery">{% include "partials/icon.html" with name="plus" size=16 %}Start a project</a>{% endblock %}
+{% block content %}
+<div class="grid g-2">
+{% for p in projects %}
+  <section class="card">
+    <div class="card-head"><h2>{{ p.name }}</h2>{% include "dashboard/_status.html" with s=p.stage label=p.get_stage_display %}</div>
+    {% if p.summary %}<p class="muted">{{ p.summary }}</p>{% endif %}
+    <div class="track">{% for code, label in stages %}<i class="{% if forloop.counter0 < p.stage_index %}on{% elif forloop.counter0 == p.stage_index %}now{% endif %}"></i>{% endfor %}</div>
+    <div class="track-labels">{% for code, label in stages %}<span class="{% if forloop.counter0 == p.stage_index %}on{% endif %}">{{ label }}</span>{% endfor %}</div>
+    <div class="usage-l" style="margin-top:20px"><span>Overall progress</span><span>{{ p.progress }}%</span></div>
+    <div class="meter"><i style="width:{{ p.progress }}%"></i></div>
+    <table class="table" style="margin-top:16px"><tbody>
+      <tr><td class="muted">Next milestone</td><td>{{ p.next_milestone|default:"To be planned" }}</td></tr>
+      <tr><td class="muted">Target date</td><td>{{ p.due|date:"j F Y"|default:"–" }}</td></tr>
+      {% if p.staging_url %}<tr><td class="muted">Test version</td><td><a href="{{ p.staging_url }}" target="_blank" rel="noopener">Open staging site</a></td></tr>{% endif %}
+    </tbody></table>
+  </section>
+{% empty %}
+  <section class="card" style="grid-column:1/-1"><div class="empty"><div class="shield">{% include "partials/icon.html" with name="code" %}</div><h3>No projects yet</h3><p>Start with a discovery workshop. We'll scope your app or SaaS and give you a fixed price for the first version.</p><a class="btn btn-primary btn-sm" href="{% url 'dashboard:order' %}?category=saas&plan=discovery">Book a discovery workshop</a></div></section>
+{% endfor %}
+</div>
+{% endblock %}

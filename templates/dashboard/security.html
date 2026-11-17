@@ -1,0 +1,92 @@
+{% extends "cms/base.html" %}
+{% block title %}Security{% endblock %}
+{% block heading %}Security{% endblock %}
+{% block sub %}<p class="sub">Two-factor sign-in, password and recent account activity.</p>{% endblock %}
+{% block content %}
+<div class="grid g-main">
+  <div class="grid">
+    {% if user.is_staff %}
+    <section class="card switch-card {% if two_factor_on %}is-on{% endif %}">
+      <div class="switch-row">
+        <div>
+          <h2>Two-factor sign-in for the dashboard</h2>
+          {% if two_factor_on %}
+          <p class="muted">On. Everyone signing in must enter a 6-digit code from an authenticator app after their password.</p>
+          {% else %}
+          <p class="muted">Off. Signing in needs only a password and the Cloudflare security check. Turn it on for stronger protection.</p>
+          {% endif %}
+        </div>
+        <form method="post" action="{% url 'cms:two_factor_switch' %}"{% if two_factor_on %} onsubmit="return confirm('Turn off two-factor sign-in for everyone?')"{% endif %}>
+          {% csrf_token %}
+          <input type="hidden" name="state" value="{% if two_factor_on %}off{% else %}on{% endif %}">
+          <button class="switch" type="submit" role="switch" aria-checked="{% if two_factor_on %}true{% else %}false{% endif %}" aria-label="Two-factor sign-in">
+            <span class="knob"></span><span class="switch-text">{% if two_factor_on %}On{% else %}Off{% endif %}</span>
+          </button>
+        </form>
+      </div>
+      {% if not two_factor_on and not profile.totp_enabled %}<p class="help" style="margin:12px 0 0">To switch it on, first set up an authenticator app on your own account below, so you can't lock yourself out.</p>{% endif %}
+    </section>
+    {% endif %}
+    <section class="card">
+      <div class="card-head"><h2>Your authenticator app</h2></div>
+      {% if profile.totp_enabled %}
+        <div class="sec-status on" style="margin-bottom:20px">
+          <div class="shield">{% include "partials/icon.html" with name="shield" size=26 %}</div>
+          <div><b>Set up since {{ profile.totp_enabled_at|date:"j F Y" }}</b><p class="muted" style="margin:0">{% if two_factor_on %}Each sign-in asks for a code from your authenticator app.{% else %}Codes aren't asked for while two-factor sign-in is switched off above.{% endif %} You have {{ profile.backup_codes_left }} backup code{{ profile.backup_codes_left|pluralize }} left.</p></div>
+        </div>
+        <div class="grid g-2" style="gap:16px">
+          <form method="post" action="{% url 'accounts:backup_codes' %}" class="card" style="background:var(--paper)">
+            {% csrf_token %}
+            <b>New backup codes</b>
+            <p class="muted" style="font-size:.9rem">Replaces your current codes. Enter a code from your app to confirm.</p>
+            <input class="input" name="code" autocomplete="one-time-code" inputmode="numeric" placeholder="6-digit code" aria-label="Authentication code" required>
+            <button class="btn btn-ghost btn-sm" style="margin-top:10px" type="submit">Create new codes</button>
+          </form>
+          <details class="card danger" style="background:var(--paper)">
+            <summary>Remove authenticator app</summary>
+            <form method="post" action="{% url 'accounts:disable_2fa' %}" style="margin-top:14px">
+              {% csrf_token %}
+              {% include "partials/field.html" with f=disable_form.password %}
+              {% include "partials/field.html" with f=disable_form.code %}
+              <button class="btn btn-danger btn-sm" type="submit">Remove authenticator app</button>
+            </form>
+          </details>
+        </div>
+      {% else %}
+        <div class="sec-status off">
+          <div class="shield">{% include "partials/icon.html" with name="lock" size=26 %}</div>
+          <div>
+            <b>No authenticator app set up</b>
+            <p class="muted" style="margin:0 0 .8rem">Connect an app like Google Authenticator now, so you're ready when two-factor sign-in is switched on.</p>
+            <a class="btn btn-primary btn-sm" href="{% url 'accounts:setup_2fa' %}">Set up authenticator app</a>
+          </div>
+        </div>
+      {% endif %}
+    </section>
+
+    <section class="card">
+      <div class="card-head"><h2>Change password</h2></div>
+      <form method="post" novalidate>
+        {% csrf_token %}
+        <input type="hidden" name="action" value="password">
+        {% include "partials/field.html" with f=pwd_form.old_password %}
+        <div class="grid g-2" style="gap:16px">
+          {% include "partials/field.html" with f=pwd_form.new_password1 %}
+          {% include "partials/field.html" with f=pwd_form.new_password2 %}
+        </div>
+        <button class="btn btn-primary btn-sm" type="submit">Change password</button>
+      </form>
+    </section>
+  </div>
+
+  <section class="card">
+    <div class="card-head"><h2>Recent activity</h2></div>
+    <ul class="events">
+      {% for e in events %}
+      <li><div><b style="font-weight:600">{{ e.get_kind_display }}</b><br><span>{{ e.ip|default:"Unknown IP" }}</span></div><span>{{ e.created|date:"j M, H:i" }}</span></li>
+      {% empty %}<li class="muted">No activity yet.</li>{% endfor %}
+    </ul>
+    <p class="muted" style="font-size:.88rem;margin:14px 0 0">Don't recognise something? Change your password and contact support.</p>
+  </section>
+</div>
+{% endblock %}

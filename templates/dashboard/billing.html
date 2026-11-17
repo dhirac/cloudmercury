@@ -1,0 +1,23 @@
+{% extends "dashboard/base.html" %}
+{% block title %}Billing{% endblock %}
+{% block heading %}Billing{% endblock %}
+{% block sub %}<p class="sub">Invoices for your services and projects.</p>{% endblock %}
+{% block content %}
+<div class="grid g-2" style="margin-bottom:20px">
+  <div class="card kpi{% if due_total %} accent{% endif %}"><div class="k-label">Amount due</div><div class="k-val">€{{ due_total|floatformat:2 }}</div><div class="k-foot">{% if due_total %}Pay by bank transfer or card. Reference the invoice number.{% else %}Nothing to pay right now.{% endif %}</div></div>
+  <div class="card kpi"><div class="k-label">Paid to date</div><div class="k-val">€{{ paid_total|floatformat:2 }}</div></div>
+</div>
+<section class="card">
+  {% if invoices %}
+  <div class="table-wrap"><table class="table">
+    <thead><tr><th>Invoice</th><th>Description</th><th>Issued</th><th>Due</th><th>Status</th><th class="num">Amount</th></tr></thead>
+    <tbody>{% for i in invoices %}
+      <tr><td><b>{{ i.number }}</b></td><td>{{ i.description }}</td><td>{{ i.issued|date:"j M Y" }}</td><td>{{ i.due|date:"j M Y" }}</td><td>{% include "dashboard/_status.html" with s=i.status label=i.get_status_display %}</td><td class="num">€{{ i.amount|floatformat:2 }}</td></tr>
+    {% endfor %}</tbody>
+  </table></div>
+  {% else %}
+  <div class="empty"><div class="shield">{% include "partials/icon.html" with name="card" %}</div><h3>No invoices yet</h3><p>Invoices appear here once you order a service.</p></div>
+  {% endif %}
+</section>
+<p class="muted" style="font-size:.9rem;margin-top:16px">Questions about an invoice? <a href="{% url 'dashboard:support' %}?new=1">Open a billing ticket</a>.</p>
+{% endblock %}

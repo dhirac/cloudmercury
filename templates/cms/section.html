@@ -1,0 +1,87 @@
+{% extends "cms/base.html" %}
+{% load static %}
+{% block title %}{{ label }}{% endblock %}
+{% block crumb %}<div class="crumb"><a href="{% url 'cms:home' %}">Website content</a></div>{% endblock %}
+{% block heading %}{{ label }}{% endblock %}
+{% block sub %}<p class="sub">{{ description }}</p>{% endblock %}
+{% block actions %}<a class="btn btn-ghost btn-sm" href="/" target="_blank" rel="noopener">{% include "partials/icon.html" with name="external" size=16 %}View website</a>{% endblock %}
+{% block content %}
+<div class="editor">
+  <div>
+    <form method="post" {% if has_files %}enctype="multipart/form-data"{% endif %} novalidate>
+      {% csrf_token %}
+      {% if form.non_field_errors %}<div class="form-error">{{ form.non_field_errors }}</div>{% endif %}
+      {% if form.errors %}<div class="form-error">Some fields need fixing. Check the messages in red below.</div>{% endif %}
+      {% for title, fields in grouped %}
+      <section class="group">
+        <h2>{{ title }}</h2>
+        <div class="fgrid">
+          {% for f in fields %}
+            {% if f.field.widget.input_type == "checkbox" %}
+              <div class="wide"><div class="toggle">{{ f }}<label for="{{ f.id_for_label }}">{{ f.label }}</label></div>{{ f.errors }}</div>
+            {% elif f.field.widget.input_type == "file" %}
+              <div class="field wide">
+                <label for="{{ f.id_for_label }}">{{ f.label }}</label>
+                <div class="file-box">
+                  <div class="file-preview {% if f.name == 'logo' %}light{% else %}dark{% endif %}">
+                    {% if f.value %}<img src="{{ f.value.url }}" alt="">{% elif f.name == 'logo' %}<img src="{% static 'ci/img/cloudmercury-logo.svg' %}" alt="">{% elif f.name == 'logo_light' %}<img src="{% static 'ci/img/cloudmercury-logo-light.svg' %}" alt="">{% else %}<img src="{% static 'ci/img/cloudmercury-mark.svg' %}" alt="">{% endif %}
+                  </div>
+                  <div>
+                    <input type="file" name="{{ f.name }}" id="{{ f.id_for_label }}" accept=".png,.jpg,.jpeg,.webp,.svg">
+                    {% if f.value %}<label class="clear"><input type="checkbox" name="{{ f.name }}-clear" id="{{ f.name }}-clear_id"> Remove and use the built-in one</label>{% else %}<span class="clear">Using the built-in one.</span>{% endif %}
+                  </div>
+                </div>
+                {% if f.help_text %}<div class="help">{{ f.help_text }}</div>{% endif %}
+                {{ f.errors }}
+              </div>
+            {% else %}
+              <div class="field{% if 'textarea' in f.field.widget.attrs.class %} wide{% endif %}">
+                <label for="{{ f.id_for_label }}">{{ f.label }}</label>
+                {{ f }}
+                {% if f.help_text %}<div class="help">{{ f.help_text }}</div>{% endif %}
+                {{ f.errors }}
+              </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </section>
+      {% endfor %}
+      <div class="savebar"><button class="btn btn-primary" type="submit">Save changes</button><span class="muted" style="font-size:.9rem">Changes appear on the website straight away.</span></div>
+    </form>
+
+    {% for l in lists %}
+    <section class="list-card" id="list-{{ l.slug }}">
+      <div class="list-head">
+        <h2>{{ l.plural }}</h2><span class="pill plain">{{ l.rows|length }}</span>
+        <a class="btn btn-primary btn-sm" href="{% url 'cms:item_add' l.slug %}">{% include "partials/icon.html" with name="plus" size=16 %}Add {{ l.singular }}</a>
+      </div>
+      {% for o, title, meta in l.rows %}
+      <div class="row{% if not o.is_active %} off{% endif %}">
+        <div class="movers">
+          <form method="post" action="{% url 'cms:item_move' l.slug o.pk 'up' %}">{% csrf_token %}<button class="icon-btn" title="Move up" aria-label="Move {{ title }} up" {% if forloop.first %}disabled{% endif %}>↑</button></form>
+          <form method="post" action="{% url 'cms:item_move' l.slug o.pk 'down' %}">{% csrf_token %}<button class="icon-btn" title="Move down" aria-label="Move {{ title }} down" {% if forloop.last %}disabled{% endif %}>↓</button></form>
+        </div>
+        <div><a class="row-title" href="{% url 'cms:item_edit' l.slug o.pk %}">{{ title|truncatechars:80 }}</a>{% if meta %}<span class="row-meta">{{ meta|truncatechars:60 }}</span>{% endif %}</div>
+        <form method="post" action="{% url 'cms:item_toggle' l.slug o.pk %}">{% csrf_token %}<button class="chip-btn {% if o.is_active %}on{% else %}off{% endif %}" title="Click to {% if o.is_active %}hide{% else %}show{% endif %}">{% if o.is_active %}Shown{% else %}Hidden{% endif %}</button></form>
+        <div class="row-actions">
+          <a class="link-btn" href="{% url 'cms:item_edit' l.slug o.pk %}">Edit</a>
+          <form method="post" action="{% url 'cms:item_delete' l.slug o.pk %}" onsubmit="return confirm('Delete “{{ title|escapejs }}”? This can’t be undone.')">{% csrf_token %}<button class="link-btn danger">Delete</button></form>
+        </div>
+      </div>
+      {% empty %}
+      <div class="empty-row">Nothing here yet. <a href="{% url 'cms:item_add' l.slug %}">Add the first {{ l.singular }}</a>.</div>
+      {% endfor %}
+    </section>
+    {% endfor %}
+  </div>
+
+  <aside class="card aside-card">
+    <div class="card-head"><h2>Tips</h2></div>
+    <p>Leave a text field empty to hide it on the website.</p>
+    {% if lists %}<p>Use the arrows to change the order. Click <b>Shown</b> to hide an item without deleting it.</p>{% endif %}
+    {% if slug == "branding" %}<p>Upload SVG or PNG files up to 2 MB. The light-background logo is used in the white top bar; the dark-background logo in the footer.</p>{% endif %}
+    {% if slug == "services" %}<p>Large cards also become the choices in the contact form's "What do you need?" list.</p>{% endif %}
+    <a class="btn btn-ghost btn-sm" href="/{% if slug in "about services process why faq contact" %}#{{ slug }}{% endif %}" target="_blank" rel="noopener">See this section on the website</a>
+  </aside>
+</div>
+{% endblock %}

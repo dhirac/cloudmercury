@@ -1,0 +1,36 @@
+{% extends "dashboard/base.html" %}
+{% block title %}Support{% endblock %}
+{% block heading %}Support{% endblock %}
+{% block sub %}<p class="sub">We reply within 4 business hours. Urgent site-down tickets are handled first.</p>{% endblock %}
+{% block actions %}{% if not show_form %}<a class="btn btn-primary btn-sm" href="?new=1">{% include "partials/icon.html" with name="plus" size=16 %}New ticket</a>{% endif %}{% endblock %}
+{% block content %}
+<div class="grid {% if show_form %}g-main{% endif %}">
+  {% if show_form %}
+  <form class="card" method="post" novalidate style="order:2">
+    <div class="card-head"><h2>Open a ticket</h2></div>
+    {% csrf_token %}
+    {% include "partials/field.html" with f=form.subject %}
+    <div class="grid g-2" style="gap:16px">
+      {% include "partials/field.html" with f=form.category %}
+      {% include "partials/field.html" with f=form.priority %}
+    </div>
+    {% include "partials/field.html" with f=form.service %}
+    {% include "partials/field.html" with f=form.message %}
+    <button class="btn btn-primary" type="submit">Open ticket</button>
+  </form>
+  {% endif %}
+  <section class="card">
+    <div class="card-head"><h2>Your tickets</h2></div>
+    {% if tickets %}
+    <div class="table-wrap"><table class="table">
+      <thead><tr><th>#</th><th>Subject</th><th>Status</th><th>Updated</th></tr></thead>
+      <tbody>{% for t in tickets %}
+        <tr><td class="muted">{{ t.pk }}</td><td><a href="{% url 'dashboard:ticket' t.pk %}">{{ t.subject }}</a><div class="muted" style="font-size:.85rem">{{ t.get_category_display }}{% if t.service %}, {{ t.service.name }}{% endif %}</div></td><td>{% include "dashboard/_status.html" with s=t.status label=t.get_status_display %}</td><td>{{ t.updated|date:"j M, H:i" }}</td></tr>
+      {% endfor %}</tbody>
+    </table></div>
+    {% else %}
+    <div class="empty"><div class="shield">{% include "partials/icon.html" with name="help" %}</div><h3>No tickets yet</h3><p>When something isn't working, or you have a question, open a ticket and the right person will pick it up.</p>{% if not show_form %}<a class="btn btn-primary btn-sm" href="?new=1">Open a ticket</a>{% endif %}</div>
+    {% endif %}
+  </section>
+</div>
+{% endblock %}

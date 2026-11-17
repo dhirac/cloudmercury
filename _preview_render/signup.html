@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0E1A47">
+<link rel="icon" href="/static/assets/img/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/ci/css/ci.css">
+
+  <title>Create account – CloudInovater</title>
+  <meta name="robots" content="noindex">
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+</head>
+<body>
+
+
+<div class="auth">
+  <aside class="auth-side">
+    <svg class="tile-pattern" aria-hidden="true" width="100%" height="100%"><defs><pattern id="az-auth" width="64" height="64" patternUnits="userSpaceOnUse"><g fill="none" stroke="currentColor" stroke-width="1.6"><path d="M32 0a32 32 0 0 1-32 32M32 0a32 32 0 0 0 32 32M32 64A32 32 0 0 1 0 32M32 64a32 32 0 0 0 32-32"/><circle cx="32" cy="32" r="7"/><path d="M32 16v-6M32 48v6M16 32h-6M48 32h6"/></g><circle cx="0" cy="0" r="4" fill="currentColor"/><circle cx="64" cy="0" r="4" fill="currentColor"/><circle cx="0" cy="64" r="4" fill="currentColor"/><circle cx="64" cy="64" r="4" fill="currentColor"/></pattern></defs><rect width="100%" height="100%" fill="url(#az-auth)"/></svg>
+
+    <a href="/" class="brand"><svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#fff"/><path d="M16 4a12 12 0 0 1-12 12M16 4a12 12 0 0 0 12 12M16 28A12 12 0 0 1 4 16M16 28a12 12 0 0 0 12-12" stroke="#fff" stroke-width="2" fill="none"/><circle cx="16" cy="16" r="3.2" fill="#fff"/></svg>
+<span>CloudInovater</span></a>
+    <div class="auth-quote">
+      
+<h2>Start with one service. Add the rest when you need them.</h2>
+<p>Create a free account to order hosting or email, start a software project or book a marketing audit.</p>
+
+    </div>
+    <div class="auth-badges">
+      <span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 5 6v5c0 4.5 3 8 7 10 4-2 7-5.5 7-10V6z"/><path d="m9 12 2 2 4-4"/></svg>
+Two-factor sign-in</span>
+      <span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+Encrypted connection</span>
+      <span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.5 3.8 5.5 3.8 9s-1.3 6.5-3.8 9c-2.5-2.5-3.8-5.5-3.8-9S9.5 5.5 12 3z"/></svg>
+Data hosted in the EU</span>
+    </div>
+  </aside>
+  <main class="auth-main">
+    <div class="auth-box">
+      
+<h1>Create your account</h1>
+<p>It takes a minute. You can add services afterwards.</p>
+<form method="post" novalidate>
+  <input type="hidden" name="csrfmiddlewaretoken" value="dcv6nQB7VzCVvFehE9caWoYXpAAOlhAGwhfAp4NPe67DPlPmDklGcUmmWuxxkXT8">
+  
+  <div class="field">
+  <label for="id_first_name">Full name</label>
+  <input type="text" name="first_name" autocomplete="name" maxlength="150" class="input" id="id_first_name" required>
+  
+  
+</div>
+
+  <div class="field">
+  <label for="id_company">Company (optional)</label>
+  <input type="text" name="company" maxlength="160" class="input" id="id_company">
+  
+  
+</div>
+
+  <div class="field">
+  <label for="id_email">Work email</label>
+  <input type="email" name="email" autocomplete="email" maxlength="320" class="input" id="id_email" required>
+  
+  
+</div>
+
+  <div class="field">
+  <label for="id_password">Password</label>
+  <input type="password" name="password" autocomplete="new-password" class="input" id="id_password" required aria-describedby="id_password_helptext">
+  <div class="help">At least 10 characters.</div>
+  
+</div>
+
+  <div class="check-row"><input type="checkbox" name="terms" class="check" id="id_terms" required><label for="id_terms">I agree to the terms of service and privacy policy</label></div>
+  
+  
+
+  <button class="btn btn-primary btn-block" type="submit">Create account</button>
+</form>
+<p class="auth-alt">Already have an account? <a href="/accounts/login/">Sign in</a></p>
+
+    </div>
+  </main>
+</div>
+<script src="/static/ci/js/site.js" defer></script>
+</body>
+</html>

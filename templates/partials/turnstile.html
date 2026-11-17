@@ -1,0 +1,5 @@
+{% if TURNSTILE_ENABLED %}
+<div class="turnstile-wrap">
+  <div class="cf-turnstile" data-sitekey="{{ TURNSTILE_SITE_KEY }}" data-theme="light" data-size="flexible"></div>
+</div>
+{% endif %}

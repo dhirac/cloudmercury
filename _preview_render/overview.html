@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0E1A47">
+<link rel="icon" href="/static/assets/img/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/ci/css/ci.css">
+
+  <title>Overview – CloudInovater</title>
+  <meta name="robots" content="noindex">
+  
+</head>
+<body>
+
+
+<div class="portal">
+  <aside class="side" aria-label="Dashboard menu">
+    <a href="/" class="brand"><svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#1F3FBF"/><path d="M16 4a12 12 0 0 1-12 12M16 4a12 12 0 0 0 12 12M16 28A12 12 0 0 1 4 16M16 28a12 12 0 0 0 12-12" stroke="#fff" stroke-width="2" fill="none"/><circle cx="16" cy="16" r="3.2" fill="#fff"/></svg>
+CloudInovater</a>
+    <nav>
+      <a href="/dashboard/" class="on"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11 12 4l8 7v8a1 1 0 0 1-1 1h-4v-6h-6v6H5a1 1 0 0 1-1-1z"/></svg>
+Overview</a>
+      <a href="/dashboard/services/" class=""><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="7" rx="2"/><rect x="3" y="13" width="18" height="7" rx="2"/><path d="M7 7.5h.01M7 16.5h.01M11 7.5h6M11 16.5h6"/></svg>
+Hosting & services</a>
+      <a href="/dashboard/projects/" class=""><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 8-4 4 4 4M16 8l4 4-4 4M13.5 5l-3 14"/></svg>
+Software projects</a>
+      <a href="/dashboard/marketing/" class=""><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19V5M4 19h16M8 15l3-4 3 2 5-6"/></svg>
+Marketing</a>
+      <a href="/dashboard/billing/" class=""><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18M7 15h4"/></svg>
+Billing</a>
+      <a href="/dashboard/support/" class=""><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6v.6M12 17h.01"/></svg>
+Support</a>
+      <div class="side-label">Account</div>
+      <a href="/accounts/profile/" class=""><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6 8-6s8 2 8 6"/></svg>
+Profile</a>
+      <a href="/accounts/security/" class=""><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 5 6v5c0 4.5 3 8 7 10 4-2 7-5.5 7-10V6z"/><path d="m9 12 2 2 4-4"/></svg>
+Security<span class="count" title="Two-factor is off">!</span></a>
+      
+    </nav>
+    <div class="side-foot">
+      <div class="side-user">
+        <div class="avatar">M</div>
+        <div><b>Marta Silva</b><span>Atlântico Surf Co.</span></div>
+      </div>
+      <form method="post" action="/accounts/logout/"><input type="hidden" name="csrfmiddlewaretoken" value="rnzxXTmPqxIdJ6L2h60XgTbMEAQMozvXKsj1Z7yxJ4dV3Mm7gh9twpzbbuNvnfOp"><button type="submit">Sign out</button></form>
+    </div>
+  </aside>
+  <main class="main">
+    <div class="topbar">
+      <button class="menu-btn" data-menu aria-label="Open menu"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+</button>
+      <div>
+        <h1>Good afternoon, Marta Silva</h1>
+        <p class="sub">Here's how your services are doing today.</p>
+      </div>
+      <div class="topbar-actions"><a class="btn btn-primary btn-sm" href="/dashboard/services/order/"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+Order a service</a></div>
+    </div>
+    
+
+
+<section class="card checklist" style="margin-bottom:20px">
+  <div class="card-head"><h2>Finish setting up your account</h2></div>
+  <ol>
+    
+    <li class="done"><a href="/accounts/profile/"><span class="tick"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4.5 4.5L19 7"/></svg>
+</span>Complete your profile</a></li>
+    
+    <li class=""><a href="/accounts/security/2fa/setup/"><span class="tick"></span>Turn on two-factor authentication</a></li>
+    
+    <li class="done"><a href="/dashboard/services/order/"><span class="tick"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4.5 4.5L19 7"/></svg>
+</span>Order your first service</a></li>
+    
+  </ol>
+</section>
+
+
+<div class="grid g-4" style="margin-bottom:20px">
+  <div class="card kpi accent">
+    <div class="k-label">Active services</div>
+    <div class="k-val">4</div>
+    <div class="k-foot">€37.00 a month</div>
+  </div>
+  <div class="card kpi">
+    <div class="k-label">Leads from campaigns</div>
+    <div class="k-val">147</div>
+    <div class="k-foot">across 3 running campaigns</div>
+  </div>
+  <div class="card kpi">
+    <div class="k-label">Open support tickets</div>
+    <div class="k-val">1</div>
+    <div class="k-foot"><a href="/dashboard/support/">Go to support</a></div>
+  </div>
+  <div class="card kpi">
+    <div class="k-label">Amount due</div>
+    <div class="k-val">€38.25</div>
+    <div class="k-foot">1 unpaid invoice</div>
+  </div>
+</div>
+
+<div class="grid g-main">
+  <div class="grid">
+    <section class="card">
+      <div class="card-head"><h2>Web hosting</h2><a href="/dashboard/services/?category=web_hosting">All hosting</a></div>
+      
+      <div class="res">
+        
+        <div class="res-row">
+          <a class="name" href="/dashboard/services/2/">shop.atlanticosurf.pt</a>
+          <span class="pill ok">Active</span>
+
+          <div class="meta"><span>Starter plan</span><span>100.00% uptime</span><span>61 GB transfer this month</span></div>
+          <div class="usage">
+            <div>
+              <div class="usage-l"><span>Disk</span><span>16.9 of 20 GB</span></div>
+              <div class="meter warn"><i style="width:84%"></i></div>
+            </div>
+            <div>
+              <div class="usage-l"><span>Renews</span><span>1 Jan 2027</span></div>
+              <div class="usage-l"><span>Price</span><span>€4.00/month</span></div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="res-row">
+          <a class="name" href="/dashboard/services/1/">atlanticosurf.pt</a>
+          <span class="pill ok">Active</span>
+
+          <div class="meta"><span>Business plan</span><span>99.98% uptime</span><span>215 GB transfer this month</span></div>
+          <div class="usage">
+            <div>
+              <div class="usage-l"><span>Disk</span><span>38.4 of 100 GB</span></div>
+              <div class="meter"><i style="width:38%"></i></div>
+            </div>
+            <div>
+              <div class="usage-l"><span>Renews</span><span>4 Dec 2026</span></div>
+              <div class="usage-l"><span>Price</span><span>€12.00/month</span></div>
+            </div>
+          </div>
+        </div>
+        
+      </div>
+      
+    </section>
+
+    <section class="card">
+      <div class="card-head"><h2>Marketing campaigns</h2><a href="/dashboard/marketing/">All campaigns</a></div>
+      
+      <div class="camp">
+        <div><b>Summer lessons – Lisbon</b> <span class="pill ok">Live</span>
+</div>
+        <svg class="spark" viewBox="0 0 120 32" width="120" height="32" aria-label="Leads per week"><polyline points="0.0,22.0 20.0,18.0 40.0,19.3 60.0,14.0 80.0,11.3 100.0,7.3 120.0,2.0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div class="stats"><span>Google Ads</span><span>87 leads</span><span>€7.04 per lead</span><span>4.01% click rate</span></div>
+      </div>
+      
+      <div class="camp">
+        <div><b>Local SEO – Costa da Caparica</b> <span class="pill ok">Live</span>
+</div>
+        <svg class="spark" viewBox="0 0 120 32" width="120" height="32" aria-label="Leads per week"><polyline points="0.0,20.7 20.0,17.6 40.0,17.6 60.0,11.3 80.0,8.2 100.0,5.1 120.0,2.0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div class="stats"><span>SEO</span><span>41 leads</span><span>€10.98 per lead</span><span>5.41% click rate</span></div>
+      </div>
+      
+      <div class="camp">
+        <div><b>Instagram reels – rentals</b> <span class="pill warn">Paused</span>
+</div>
+        <svg class="spark" viewBox="0 0 120 32" width="120" height="32" aria-label="Leads per week"><polyline points="0.0,18.8 30.0,2.0 60.0,7.6 90.0,13.2 120.0,2.0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div class="stats"><span>Meta Ads</span><span>19 leads</span><span>€9.90 per lead</span><span>2.26% click rate</span></div>
+      </div>
+      
+    </section>
+
+    <section class="card">
+      <div class="card-head"><h2>Software projects</h2><a href="/dashboard/projects/">All projects</a></div>
+      
+      <div class="res-row">
+        <b>Instructor scheduling SaaS</b><span class="muted" style="font-size:.88rem">25% done</span>
+        <div style="grid-column:1/-1">
+          <div class="track"><i class="on"></i><i class="now"></i><i class=""></i><i class=""></i><i class=""></i></div>
+          <div class="track-labels"><span class="">Discovery</span><span class="on">Design</span><span class="">Build</span><span class="">Testing</span><span class="">Launched</span></div>
+        </div>
+        <div class="meta"><span>Next: Clickable prototype review</span><span>Due 15 Jan</span></div>
+      </div>
+      
+      <div class="res-row">
+        <b>Lesson booking app</b><span class="muted" style="font-size:.88rem">62% done</span>
+        <div style="grid-column:1/-1">
+          <div class="track"><i class="on"></i><i class="on"></i><i class="now"></i><i class=""></i><i class=""></i></div>
+          <div class="track-labels"><span class="">Discovery</span><span class="">Design</span><span class="on">Build</span><span class="">Testing</span><span class="">Launched</span></div>
+        </div>
+        <div class="meta"><span>Next: Payments with MB WAY and cards</span><span>Due 20 Dec</span></div>
+      </div>
+      
+    </section>
+  </div>
+
+  <div class="grid">
+    <section class="card">
+      <div class="card-head"><h2>Email</h2><a href="/dashboard/services/?category=email_hosting">Manage</a></div>
+      
+      <div class="res-row">
+        <b>atlanticosurf.pt</b><span class="pill ok">Active</span>
+
+        <div style="grid-column:1/-1">
+          <div class="usage-l"><span>Mailboxes</span><span>6 of 8</span></div>
+          <div class="meter warn"><i style="width:75%"></i></div>
+        </div>
+        <div class="meta"><span>Mail Pro</span><span>SPF, DKIM, DMARC set up</span></div>
+      </div>
+      
+    </section>
+
+    <section class="card">
+      <div class="card-head"><h2>Upcoming renewals</h2></div>
+      
+      <table class="table"><tbody>
+        <tr><td>atlanticosurf.pt</td><td class="num">4 Dec</td></tr><tr><td>Team mail</td><td class="num">4 Dec</td></tr><tr><td>shop.atlanticosurf.pt</td><td class="num">1 Jan</td></tr>
+      </tbody></table>
+      
+    </section>
+
+    <section class="card">
+      <div class="card-head"><h2>Support</h2><a href="/dashboard/support/?new=1">New ticket</a></div>
+      
+      <div class="res-row"><a class="name" href="/dashboard/support/1/">Contact form emails going to spam</a><span class="pill warn">Waiting on you</span>
+<div class="meta"><span>#1</span><span>Updated now</span></div></div>
+      
+    </section>
+
+    <section class="card">
+      <div class="card-head"><h2>Account security</h2></div>
+      
+        <div class="sec-status off"><div class="shield"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+</div><div><b>Two-factor is off</b><p class="muted" style="margin:0 0 .6rem;font-size:.9rem">Add a second step to sign-in in about two minutes.</p><a class="btn btn-primary btn-sm" href="/accounts/security/2fa/setup/">Turn on two-factor</a></div></div>
+      
+    </section>
+  </div>
+</div>
+
+  </main>
+</div>
+<script src="/static/ci/js/site.js" defer></script>
+
+</body>
+</html>

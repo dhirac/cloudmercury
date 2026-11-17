@@ -1,0 +1,18 @@
+{% extends "accounts/auth_base.html" %}
+{% block title %}Sign in{% endblock %}
+{% block head %}<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>{% endblock %}
+{% block content %}
+<h1>Welcome back</h1>
+<p>Sign in to the website dashboard.</p>
+<form method="post" novalidate>
+  {% csrf_token %}
+  <input type="hidden" name="next" value="{{ next }}">
+  {% if form.non_field_errors %}<div class="form-error">{{ form.non_field_errors }}</div>{% endif %}
+  {% include "partials/field.html" with f=form.username %}
+  {% include "partials/field.html" with f=form.password %}
+  <div class="check-row">{{ form.remember }}<label for="id_remember">{{ form.remember.label }}</label></div>
+  {% include "partials/turnstile.html" %}
+  <button class="btn btn-primary btn-block" type="submit">Sign in</button>
+</form>
+<p class="auth-alt"><a href="/">Back to the website</a></p>
+{% endblock %}

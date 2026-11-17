@@ -1,0 +1,49 @@
+{% extends "cms/base.html" %}
+{% block title %}Turn on two-factor{% endblock %}
+{% block heading %}Turn on two-factor{% endblock %}
+{% block sub %}<p class="sub">Takes about two minutes. You'll need your phone.</p>{% endblock %}
+{% block head %}<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" defer></script>{% endblock %}
+{% block content %}
+<section class="card" style="max-width:820px">
+  <ol class="steps-v">
+    <li><div>
+      <b>Install an authenticator app</b>
+      <p class="muted" style="margin:0">Google Authenticator, Microsoft Authenticator, 1Password, Bitwarden or Authy all work.</p>
+    </div></li>
+    <li><div>
+      <b>Scan this QR code with the app</b>
+      <div class="qr-box" style="margin-top:14px">
+        <div class="qr" id="qr" data-uri="{{ otpauth }}" aria-label="QR code for your authenticator app"></div>
+        <div>
+          <p class="muted" style="margin-top:0">Can't scan it? Choose "enter a setup key" in the app and type this key:</p>
+          <span class="secret" id="secret">{{ secret }}</span>
+          <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+            <button type="button" class="btn btn-ghost btn-sm" data-copy="#secret">Copy key</button>
+            <a class="btn btn-ghost btn-sm" href="?new=1">Make a new key</a>
+          </div>
+        </div>
+      </div>
+    </div></li>
+    <li><div>
+      <b>Enter the 6-digit code the app shows</b>
+      <form method="post" novalidate style="max-width:320px;margin-top:12px">
+        {% csrf_token %}
+        {% include "partials/field.html" with f=form.code %}
+        <button class="btn btn-primary" type="submit">Turn on two-factor</button>
+      </form>
+    </div></li>
+  </ol>
+</section>
+{% endblock %}
+{% block scripts %}
+<script>
+window.addEventListener("load", function () {
+  var el = document.getElementById("qr");
+  if (window.QRCode && el) {
+    new QRCode(el, { text: el.dataset.uri, width: 176, height: 176, colorDark: "#0E1A47", colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.M });
+  } else if (el) {
+    el.innerHTML = '<span class="muted" style="font-size:.85rem;text-align:center">QR code unavailable. Use the setup key.</span>';
+  }
+});
+</script>
+{% endblock %}

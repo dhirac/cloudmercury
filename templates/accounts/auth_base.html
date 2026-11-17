@@ -1,0 +1,37 @@
+{% load static %}<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% include "partials/head.html" %}
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'ci/css/cms.css' %}">
+  <title>{% block title %}Sign in{% endblock %} – CloudMercury</title>
+  <meta name="robots" content="noindex">
+  {% block head %}{% endblock %}
+</head>
+<body>
+{% include "partials/messages.html" %}
+<div class="auth">
+  <aside class="auth-side">
+    
+    <a href="/" class="brand"><img src="{% static 'ci/img/cloudmercury-logo-light.svg' %}" alt="CloudMercury" style="height:44px;width:auto"></a>
+    <div class="auth-quote">
+      {% block side %}
+      <h2>Manage your CloudMercury website.</h2>
+      <p>Edit text, services and FAQ, change your logo and colours, and read messages from visitors.</p>
+      {% endblock %}
+    </div>
+    <div class="auth-badges">
+      <span>{% include "partials/icon.html" with name="shield" size=16 %}Two-factor sign-in</span>
+      <span>{% include "partials/icon.html" with name="lock" size=16 %}Encrypted connection</span>
+      <span>{% include "partials/icon.html" with name="globe" size=16 %}Data hosted in the EU</span>
+    </div>
+  </aside>
+  <main class="auth-main">
+    <div class="auth-box">
+      {% block content %}{% endblock %}
+    </div>
+  </main>
+</div>
+<script src="{% static 'ci/js/site.js' %}" defer></script>
+</body>
+</html>
