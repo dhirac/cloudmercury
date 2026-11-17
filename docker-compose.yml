@@ -1,0 +1,59 @@
+version: "3.8"
+
+services:
+  cloudmercury_db:
+    image: postgres:14-alpine
+    container_name: cloudmercury_db
+    restart: always
+    environment:
+      POSTGRES_DB: cloudmercury_db
+      POSTGRES_USER: cloudmercury_user
+      POSTGRES_PASSWORD: cloudmercury_pass
+    volumes:
+      - cloudmercury_pgdata:/var/lib/postgresql/data/
+    networks:
+      - internal
+
+  cloudmercury_django:
+    build:
+      context: .
+    container_name: cloudmercury_django
+    restart: always
+    # production server (gunicorn) — never Django's runserver on a live site
+    command: >
+      sh -c "python manage.py migrate --noinput &&
+             python manage.py collectstatic --noinput &&
+             gunicorn drivemandu.wsgi --bind 0.0.0.0:8009 --workers 3 --timeout 60 --access-logfile -"
+    volumes:
+      - ./:/app
+      - ./media:/app/media
+    env_file:
+      - ./.env
+    environment:
+      DB_ENGINE: postgres
+      DJANGO_DEBUG: "False"
+      DB_NAME: cloudmercury_db
+      DB_USER: cloudmercury_user
+      DB_PASSWORD: cloudmercury_pass
+      DB_HOST: cloudmercury_db
+      DB_PORT: 5432
+    depends_on:
+      - cloudmercury_db
+
+    # only reachable from the VM itself (your reverse proxy), not from the internet
+    ports:
+      - "127.0.0.1:8009:8009"
+
+    networks:
+      - hosting_net
+      - internal
+
+networks:
+  hosting_net:
+    external: true
+
+  internal:
+    driver: bridge
+
+volumes:
+  cloudmercury_pgdata:
