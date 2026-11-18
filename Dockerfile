@@ -19,7 +19,7 @@ RUN pip install --upgrade pip && pip install -r requirements.txt
 # Copy project
 COPY . /app/
 
-# Expose Django port
+# Expose Django port test
 EXPOSE 8010
 
 # Production server: prepare static files, update the database, then run gunicorn
