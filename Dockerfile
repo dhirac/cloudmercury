@@ -1,27 +1,26 @@
-# CloudMercury website
 FROM python:3.12-slim
 
-ENV PYTHONDONTWRITEBYTECODE=1 \
-    PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 
-WORKDIR /app/backend
+WORKDIR /app
 
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    libpq-dev \
+    gcc \
+    && rm -rf /var/lib/apt/lists/*
 
-COPY . .
+# Install Python dependencies
+COPY requirements.txt /app/
+RUN pip install --upgrade pip && pip install -r requirements.txt
 
-# Collect CSS, JS and images into staticfiles/ so WhiteNoise can serve them.
-RUN python manage.py collectstatic --noinput
+# Copy project
+COPY . /app/
 
-EXPOSE 8001
+# Expose Django port
+EXPOSE 8010
 
-# Migrations run when the container starts (the Postgres database isn't reachable at build time).
-# Settings such as DATABASE_URL come from the environment, e.g. `docker run --env-file .env ...`
-CMD ["sh", "-c", "python manage.py migrate --noinput && gunicorn core.wsgi:application --bind 0.0.0.0:8001 --workers 3 --timeout 60"]
-
-# Build and push:
-#   docker build -t cloudmercury:v3 .
-#   docker run --env-file .env -p 8001:8001 -v cloudmercury-media:/app/backend/media cloudmercury:v3
-#   docker tag cloudmercury:v3 gcr.io/cloudinovater/cloudmercury:v3
-#   docker push gcr.io/cloudinovater/cloudmercury:v3
+# Production server: prepare static files, update the database, then run gunicorn
+CMD ["sh", "-c", "python manage.py collectstatic --noinput && python manage.py migrate --noinput && gunicorn himporio.wsgi --bind 0.0.0.0:${PORT:-8010} --workers 3 --timeout 60 --access-logfile -"]
