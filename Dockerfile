@@ -23,4 +23,4 @@ COPY . /app/
 EXPOSE 8010
 
 # Production server: prepare static files, update the database, then run gunicorn
-CMD ["sh", "-c", "python manage.py collectstatic --noinput && python manage.py migrate --noinput && gunicorn himporio.wsgi --bind 0.0.0.0:${PORT:-8010} --workers 3 --timeout 60 --access-logfile -"]
+CMD ["sh", "-c", "python manage.py collectstatic --noinput && python manage.py migrate --noinput && gunicorn config.wsgi --bind 0.0.0.0:${PORT:-8010} --workers 3 --timeout 60 --access-logfile -"]
