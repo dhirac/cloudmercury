@@ -23,7 +23,7 @@ services:
     command: >
       sh -c "python manage.py migrate --noinput &&
              python manage.py collectstatic --noinput &&
-             gunicorn drivemandu.wsgi --bind 0.0.0.0:8009 --workers 3 --timeout 60 --access-logfile -"
+             gunicorn core.wsgi --bind 0.0.0.0:8010 --workers 3 --timeout 60 --access-logfile -"
     volumes:
       - ./:/app
       - ./media:/app/media
@@ -42,7 +42,7 @@ services:
 
     # only reachable from the VM itself (your reverse proxy), not from the internet
     ports:
-      - "127.0.0.1:8009:8009"
+      - "127.0.0.1:8010:8010"
 
     networks:
       - hosting_net
